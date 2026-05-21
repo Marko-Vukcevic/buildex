@@ -1,184 +1,171 @@
 <script>
-	// `data` ist alles was load() in +page.server.js zurückgegeben hat.
+	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	let { data } = $props();
+
+	const statusOptions = ['', 'offen', 'laufend', 'pausiert', 'abgeschlossen'];
 </script>
 
 <svelte:head>
-	<title>BUILDEX – Projektübersicht</title>
+	<title>BUILDEX – Projektüberblick</title>
 </svelte:head>
 
-<header class="topbar">
-	<div class="brand">
-		<div class="logo">B</div>
-		<div>
-			<div class="name">Max Muster</div>
-			<div class="company">Bauunternehmung XY AG</div>
-		</div>
+<header class="header">
+	<div>
+		<h1>Projektüberblick</h1>
+		<p class="subtitle">Verwalte alle Baustellen und Ausschreibungen an einem Ort.</p>
 	</div>
-	<a class="cta" href="/projects/new">+ Neues Projekt</a>
+	<a href="/projects/new" class="btn btn-primary">+ Neues Projekt</a>
 </header>
 
-<main>
-	<h1>Projektüberblick</h1>
+<section class="stats">
+	<div class="stat">
+		<div class="stat-value">{data.stats.total}</div>
+		<div class="stat-label">Projekte gesamt</div>
+	</div>
+	<div class="stat">
+		<div class="stat-value">{data.stats.byStatus.laufend ?? 0}</div>
+		<div class="stat-label">Laufend</div>
+	</div>
+	<div class="stat">
+		<div class="stat-value">{data.stats.byStatus.offen ?? 0}</div>
+		<div class="stat-label">Offen</div>
+	</div>
+	<div class="stat">
+		<div class="stat-value">{data.stats.byStatus.abgeschlossen ?? 0}</div>
+		<div class="stat-label">Abgeschlossen</div>
+	</div>
+</section>
 
-	{#if data.projects.length === 0}
-		<div class="empty">
-			<p>Noch keine Projekte erfasst.</p>
-			<a class="cta" href="/projects/new">Erstes Projekt erfassen</a>
-		</div>
-	{:else}
-		<div class="grid">
-			{#each data.projects as project (project.id)}
-				<article class="card">
-					<header class="card-head">
-						<h2>{project.name}</h2>
-						<span class="badge badge-{project.status}">{project.status}</span>
-					</header>
-					<p class="addr">{project.address}</p>
-					<p class="dates">
-						{#if project.startDate || project.endDate}
-							Projektdauer: {project.startDate} {project.endDate ? `– ${project.endDate}` : ''}
-						{/if}
-					</p>
-				</article>
-			{/each}
-		</div>
+<form method="GET" class="filters" data-sveltekit-keepfocus>
+	<input
+		type="search"
+		name="search"
+		placeholder="Suche nach Name oder Adresse…"
+		value={data.filters.search}
+	/>
+	<select name="status">
+		{#each statusOptions as opt}
+			<option value={opt} selected={data.filters.status === opt}>
+				{opt === '' ? 'Alle Stati' : opt}
+			</option>
+		{/each}
+	</select>
+	<button type="submit" class="btn btn-secondary">Anwenden</button>
+	{#if data.filters.search || data.filters.status}
+		<a href="/" class="btn-reset">Reset</a>
 	{/if}
-</main>
+</form>
+
+{#if data.projects.length === 0}
+	<div class="empty">
+		{#if data.filters.search || data.filters.status}
+			<p>Keine Projekte gefunden mit diesen Filtern.</p>
+			<a href="/" class="btn btn-secondary">Filter zurücksetzen</a>
+		{:else}
+			<p>Noch keine Projekte erfasst.</p>
+			<a href="/projects/new" class="btn btn-primary">Erstes Projekt erfassen</a>
+		{/if}
+	</div>
+{:else}
+	<div class="grid">
+		{#each data.projects as project (project.id)}
+			<ProjectCard {project} />
+		{/each}
+	</div>
+{/if}
 
 <style>
-	:global(body) {
-		margin: 0;
-		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-		background: #fafafa;
-		color: #1a1a1a;
-	}
-
-	.topbar {
+	.header {
 		display: flex;
-		align-items: center;
 		justify-content: space-between;
-		padding: 1rem 2rem;
+		align-items: flex-start;
+		gap: var(--sp-4);
+		padding: var(--sp-6) var(--sp-6) var(--sp-3);
+	}
+	h1 {
+		margin: 0 0 var(--sp-1);
+		font-size: 1.75rem;
+	}
+	.subtitle {
+		margin: 0;
+		color: var(--c-text-muted);
+		font-size: 0.95rem;
+	}
+
+	.stats {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+		gap: var(--sp-3);
+		padding: 0 var(--sp-6) var(--sp-4);
+	}
+	.stat {
 		background: white;
-		border-bottom: 1px solid #eee;
+		border: 1px solid var(--c-border);
+		border-radius: var(--radius-md);
+		padding: var(--sp-4) var(--sp-5);
+		box-shadow: var(--shadow-card);
 	}
-
-	.brand {
-		display: flex;
-		gap: 0.75rem;
-		align-items: center;
-	}
-
-	.logo {
-		width: 40px;
-		height: 40px;
-		border-radius: 50%;
-		background: #fbc02d;
-		color: #1a1a1a;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+	.stat-value {
+		font-size: 1.75rem;
 		font-weight: 700;
-		font-size: 1.25rem;
+		color: var(--c-text);
+		line-height: 1;
 	}
-
-	.name {
-		font-weight: 600;
-	}
-
-	.company {
-		color: #777;
+	.stat-label {
+		margin-top: var(--sp-1);
+		color: var(--c-text-muted);
 		font-size: 0.85rem;
 	}
 
-	main {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 2rem;
+	.filters {
+		display: flex;
+		gap: var(--sp-3);
+		align-items: center;
+		padding: 0 var(--sp-6) var(--sp-5);
+		flex-wrap: wrap;
+	}
+	input[type='search'] {
+		flex: 1;
+		min-width: 220px;
+		padding: 10px 14px;
+		border: 1px solid var(--c-border-strong);
+		border-radius: var(--radius-sm);
+		font-size: 0.95rem;
+	}
+	select {
+		padding: 10px 14px;
+		border: 1px solid var(--c-border-strong);
+		border-radius: var(--radius-sm);
+		background: white;
+		font-size: 0.95rem;
+		min-width: 160px;
+	}
+	input:focus,
+	select:focus {
+		outline: none;
+		border-color: var(--c-yellow);
+		box-shadow: 0 0 0 3px rgba(251, 192, 45, 0.2);
 	}
 
-	h1 {
-		margin: 0 0 1.5rem;
-		font-size: 1.5rem;
+	.btn-reset {
+		text-decoration: underline;
+		color: var(--c-text-muted);
+		font-size: 0.875rem;
 	}
 
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-		gap: 1rem;
-	}
-
-	.card {
-		background: white;
-		border: 1px solid #eee;
-		border-radius: 8px;
-		padding: 1.25rem;
-		transition: box-shadow 0.15s;
-	}
-
-	.card:hover {
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-	}
-
-	.card-head {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		margin-bottom: 0.5rem;
-	}
-
-	.card h2 {
-		margin: 0;
-		font-size: 1.1rem;
-	}
-
-	.badge {
-		font-size: 0.75rem;
-		padding: 0.2rem 0.6rem;
-		border-radius: 12px;
-		background: #fbc02d;
-		color: #1a1a1a;
-		text-transform: uppercase;
-	}
-
-	.badge-abgeschlossen {
-		background: #c8e6c9;
-		color: #2e7d32;
-	}
-
-	.badge-pausiert {
-		background: #e0e0e0;
-		color: #555;
-	}
-
-	.addr,
-	.dates {
-		margin: 0.25rem 0;
-		color: #555;
-		font-size: 0.9rem;
-	}
-
-	.cta {
-		background: #fbc02d;
-		color: #1a1a1a;
-		padding: 0.6rem 1.1rem;
-		border-radius: 6px;
-		text-decoration: none;
-		font-weight: 600;
-		font-size: 0.95rem;
-	}
-
-	.cta:hover {
-		background: #f9a825;
+		gap: var(--sp-4);
+		padding: 0 var(--sp-6) var(--sp-7);
 	}
 
 	.empty {
 		text-align: center;
-		padding: 3rem 1rem;
-		color: #777;
+		padding: var(--sp-7) var(--sp-4);
+		color: var(--c-text-muted);
 	}
-
 	.empty p {
-		margin-bottom: 1rem;
+		margin-bottom: var(--sp-4);
 	}
 </style>

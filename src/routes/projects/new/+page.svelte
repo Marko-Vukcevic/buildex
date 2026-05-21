@@ -1,5 +1,4 @@
 <script>
-	// `form` enthält Daten, die die Action zurückgibt (z.B. Validierungsfehler).
 	let { form } = $props();
 </script>
 
@@ -7,29 +6,40 @@
 	<title>Neues Projekt – BUILDEX</title>
 </svelte:head>
 
-<header class="topbar">
-	<div class="brand">
-		<div class="logo">B</div>
-		<a href="/" class="back">← Zurück</a>
-	</div>
+<header class="header">
+	<a href="/" class="back">← Zurück zur Übersicht</a>
+	<h1>Neues Projekt anlegen</h1>
+	<p class="subtitle">Erfasse die Eckdaten – Details kannst du später ergänzen.</p>
 </header>
 
-<main>
-	<h1>Neues Projekt anlegen</h1>
-
-	{#if form?.error}
-		<div class="alert alert-error">{form.error}</div>
-	{/if}
-
+<div class="layout">
 	<form method="POST" class="form">
+		{#if form?.errors?._}
+			<div class="alert alert-error">{form.errors._}</div>
+		{/if}
+
 		<label>
 			<span>Projektname *</span>
-			<input name="name" type="text" required value={form?.values?.name ?? ''} placeholder="z.B. Wohnüberbauung Steinegg" />
+			<input
+				name="name"
+				type="text"
+				required
+				value={form?.values?.name ?? ''}
+				placeholder="z.B. Wohnüberbauung Steinegg"
+				autofocus
+			/>
+			{#if form?.errors?.name}<small class="err">{form.errors.name}</small>{/if}
 		</label>
 
 		<label>
 			<span>Adresse / Baustelle</span>
-			<input name="address" type="text" value={form?.values?.address ?? ''} placeholder="Badenerstrasse 26, 8952 Schlieren" />
+			<input
+				name="address"
+				type="text"
+				value={form?.values?.address ?? ''}
+				placeholder="Badenerstrasse 26, 8952 Schlieren"
+			/>
+			{#if form?.errors?.address}<small class="err">{form.errors.address}</small>{/if}
 		</label>
 
 		<div class="row">
@@ -40,167 +50,115 @@
 			<label>
 				<span>Ende (geplant)</span>
 				<input name="endDate" type="month" value={form?.values?.endDate ?? ''} />
+				{#if form?.errors?.endDate}<small class="err">{form.errors.endDate}</small>{/if}
 			</label>
 		</div>
 
 		<label>
 			<span>Status</span>
 			<select name="status">
-				<option value="offen" selected={form?.values?.status === 'offen' || !form?.values}>offen</option>
-				<option value="laufend" selected={form?.values?.status === 'laufend'}>laufend</option>
-				<option value="pausiert" selected={form?.values?.status === 'pausiert'}>pausiert</option>
-				<option value="abgeschlossen" selected={form?.values?.status === 'abgeschlossen'}>abgeschlossen</option>
+				{#each ['offen', 'laufend', 'pausiert', 'abgeschlossen'] as s}
+					<option value={s} selected={(form?.values?.status ?? 'offen') === s}>{s}</option>
+				{/each}
 			</select>
 		</label>
 
-		<div class="actions">
-			<a href="/" class="btn-secondary">Abbrechen</a>
-			<button type="submit" class="btn-primary">Projekt anlegen</button>
+		<label>
+			<span>Notizen</span>
+			<textarea
+				name="notes"
+				rows="4"
+				placeholder="Z.B. Besonderheiten, Anforderungen, interne Vermerke …"
+				>{form?.values?.notes ?? ''}</textarea
+			>
+			{#if form?.errors?.notes}<small class="err">{form.errors.notes}</small>{/if}
+		</label>
+
+		<div class="form-actions">
+			<a href="/" class="btn btn-secondary">Abbrechen</a>
+			<button type="submit" class="btn btn-primary">Projekt anlegen</button>
 		</div>
 	</form>
-</main>
+</div>
 
 <style>
-	:global(body) {
-		margin: 0;
-		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-		background: #fafafa;
-		color: #1a1a1a;
+	.header {
+		padding: var(--sp-6) var(--sp-6) var(--sp-4);
 	}
-
-	.topbar {
-		display: flex;
-		padding: 1rem 2rem;
-		background: white;
-		border-bottom: 1px solid #eee;
-	}
-
-	.brand {
-		display: flex;
-		gap: 1rem;
-		align-items: center;
-	}
-
-	.logo {
-		width: 40px;
-		height: 40px;
-		border-radius: 50%;
-		background: #fbc02d;
-		color: #1a1a1a;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-weight: 700;
-	}
-
 	.back {
-		color: #555;
+		display: inline-block;
+		margin-bottom: var(--sp-3);
+		color: var(--c-text-muted);
 		text-decoration: none;
-		font-size: 0.95rem;
+		font-size: 0.875rem;
 	}
-
 	.back:hover {
-		color: #1a1a1a;
+		color: var(--c-text);
 	}
-
-	main {
-		max-width: 640px;
-		margin: 0 auto;
-		padding: 2rem;
-	}
-
 	h1 {
-		margin: 0 0 1.5rem;
+		margin: 0 0 var(--sp-1);
+	}
+	.subtitle {
+		margin: 0;
+		color: var(--c-text-muted);
+	}
+
+	.layout {
+		padding: 0 var(--sp-6) var(--sp-7);
+		max-width: 720px;
 	}
 
 	.form {
 		background: white;
-		padding: 2rem;
-		border-radius: 8px;
-		border: 1px solid #eee;
+		border: 1px solid var(--c-border);
+		border-radius: var(--radius-md);
+		padding: var(--sp-5);
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--sp-4);
 	}
 
 	label {
 		display: flex;
 		flex-direction: column;
-		gap: 0.35rem;
+		gap: var(--sp-1);
 	}
-
-	label span {
+	label > span {
 		font-size: 0.85rem;
-		color: #555;
+		font-weight: 600;
+		color: var(--c-text-muted);
 	}
-
 	input,
-	select {
-		padding: 0.65rem 0.8rem;
-		border: 1px solid #ddd;
-		border-radius: 4px;
-		font-size: 1rem;
+	select,
+	textarea {
+		padding: 10px 12px;
+		border: 1px solid var(--c-border-strong);
+		border-radius: var(--radius-sm);
+		font-size: 0.95rem;
 		font-family: inherit;
 		background: white;
 	}
-
 	input:focus,
-	select:focus {
+	select:focus,
+	textarea:focus {
 		outline: none;
-		border-color: #fbc02d;
+		border-color: var(--c-yellow);
 		box-shadow: 0 0 0 3px rgba(251, 192, 45, 0.2);
 	}
-
 	.row {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 1rem;
+		gap: var(--sp-3);
 	}
-
-	.actions {
+	.err {
+		color: var(--c-danger);
+		font-size: 0.8rem;
+	}
+	.form-actions {
 		display: flex;
+		gap: var(--sp-3);
 		justify-content: flex-end;
-		gap: 0.75rem;
-		margin-top: 0.5rem;
-	}
-
-	.btn-primary {
-		background: #fbc02d;
-		color: #1a1a1a;
-		border: none;
-		padding: 0.7rem 1.5rem;
-		border-radius: 6px;
-		font-weight: 600;
-		font-size: 0.95rem;
-		cursor: pointer;
-	}
-
-	.btn-primary:hover {
-		background: #f9a825;
-	}
-
-	.btn-secondary {
-		background: transparent;
-		color: #555;
-		padding: 0.7rem 1.2rem;
-		border-radius: 6px;
-		text-decoration: none;
-		font-size: 0.95rem;
-	}
-
-	.btn-secondary:hover {
-		color: #1a1a1a;
-	}
-
-	.alert {
-		padding: 0.85rem 1rem;
-		border-radius: 4px;
-		margin-bottom: 1rem;
-	}
-
-	.alert-error {
-		background: #ffebee;
-		color: #c62828;
-		border: 1px solid #ef9a9a;
+		padding-top: var(--sp-3);
+		border-top: 1px solid var(--c-border);
 	}
 </style>
