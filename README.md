@@ -5,7 +5,7 @@
 **Autor:** Marko Vukcevic ([vukcema1@students.zhaw.ch](mailto:vukcema1@students.zhaw.ch))
 **Modul:** Prototyping (w.BA.XX.3Pt-WIN.XX), ZHAW Wirtschaftsinformatik, FS 2026
 **Repository:** <https://github.com/Marko-Vukcevic/buildex>
-**Live-Demo:** *Wird nach Netlify-Deploy ergänzt.*
+**Live-Demo:** <https://bldx.netlify.app/>
 **Figma-Mockup:** <https://www.figma.com/proto/w0d5idq8xY1KQAPKX1H2Kg/Mock-Up?node-id=6042-1194&starting-point-node-id=6042%3A1194>
 
 ## Inhaltsverzeichnis
