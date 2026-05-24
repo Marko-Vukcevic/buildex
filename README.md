@@ -184,7 +184,7 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
 
 ## 4. Erweiterungen
 
-> Über den Mindestumfang hinaus wurden vier sinnvolle Erweiterungen umgesetzt. Jede ist klar vom Pflicht-CRUD abgrenzbar.
+> Über den Mindestumfang (Projekt-CRUD) hinaus wurden **acht Erweiterungen** umgesetzt — vier davon ergänzen den ursprünglichen Scope (Detail-Page, Filter, Stats, Validierung), vier weitere realisieren tatsächlich die in der Ideenfindung beschriebene Kern-Vision (Lieferungen, Wochenkalender, CO₂-Bilanz, Notizen-Timeline). Damit wird BUILDEX vom generischen Projekt-CRUD zu einem fachspezifischen Bauleitungs-Tool.
 
 ### 4.1 Projekt-Detail-Seite mit Inline-Edit und Delete-Confirm
 - **Beschreibung & Nutzen:** Eigene Route `/projects/[id]` mit vollständigen Stammdaten, Notizen, Erstellungs-/Änderungs-Zeitstempel. Edit-Modus passiert inline auf derselben Seite (keine zusätzliche Navigation). Löschen erfordert eine native `confirm()`-Bestätigung (*Error prevention*, Nielsen #5).
@@ -213,6 +213,38 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
 - **Wo umgesetzt:**
   - Validierungs-Funktion: `validate(data)` in `src/lib/server/projects.js`.
   - Frontend: `{#if form?.errors?.name}<small class="err">…</small>{/if}` in beiden Formular-Pages.
+
+### 4.5 Lieferungen pro Projekt (Sub-Entity CRUD mit Status-Workflow)
+- **Beschreibung & Nutzen:** Pro Projekt können Material-Lieferungen (Beton, Stahl, Holz, Fertigteile etc.) erfasst, terminiert und durch einen 5-stufigen Status-Workflow gezogen werden: **bestellt → bestätigt → unterwegs → angekommen → verrechnet**. Damit wird das in der Ideenfindung beschriebene Kern-Problem ("kein durchgängiger Workflow Bestellung → Liefertermin → Lieferschein → Rechnung") direkt adressiert. Lieferungen mit Liefertermin in der Vergangenheit, die nicht als angekommen markiert sind, werden als *überfällig* rot hervorgehoben (Nielsen #1: *Visibility of system status*). Der Status kann direkt in der Tabelle per Dropdown gewechselt werden (kein Detail-Seiten-Roundtrip).
+- **Wo umgesetzt:**
+  - **Frontend:** `/projects/[id]/+page.svelte` (Lieferungs-Tabelle mit Inline-Status-Switcher), `/projects/[id]/deliveries/new/+page.svelte` (Neuanlage mit Material-Picker der die Einheit automatisch vorausfüllt), `/projects/[id]/deliveries/[did]/+page.svelte` (Edit/Delete via `formaction`-Buttons).
+  - **Backend:** `src/lib/server/deliveries.js` mit `createDelivery`, `updateDelivery`, `setDeliveryStatus`, `deleteDelivery`, `listDeliveriesForProject`, `deliverySummaryForProject` (Anzahl/Überfällig-Count/CO₂-Total). Form Actions: `addDelivery`, `setDeliveryStatus`, `deleteDelivery` auf der Projekt-Detail-Seite.
+  - **Datenbank:** Neue Collection `deliveries` (Felder: projectId, material, materialKey, quantity, unit, supplier, scheduledDate, status, notes, co2Kg, createdAt, updatedAt).
+- **Referenz:** Sichtbar auf jeder Projekt-Detail-Seite unterhalb der KPI-Kacheln.
+
+### 4.6 Wochenkalender mit Konflikt-Erkennung
+- **Beschreibung & Nutzen:** Eigene Route `/calendar` zeigt eine **Montag-Sonntag-Wochenansicht aller Lieferungen über sämtliche Projekte hinweg** als Karten. Jede Karte ist farbcodiert nach Status (grau/orange/blau/grün/dunkelgrau) und verlinkt direkt zur Lieferungs-Edit-Page. Heute ist mit gelbem Rahmen markiert. **Konflikt-Erkennung:** Sobald auf derselben Baustelle am gleichen Tag mehr als 3 Lieferungen geplant sind, wird der Tag in orange-rot eingefärbt und ein expliziter Konflikt-Hinweis mit Projektname und Anzahl angezeigt — das ist genau die *baustellentaugliche Lieferübersicht* aus der Ideenfindungs-Leitfrage. Navigation per `←/→ Wochen`-Buttons mit Query-Parameter `?week=YYYY-MM-DD`.
+- **Wo umgesetzt:**
+  - **Frontend:** `src/routes/calendar/+page.svelte` (CSS-Grid mit 7 Spalten, ohne externe Chart-Library), Sidebar-Link.
+  - **Backend:** `src/routes/calendar/+page.server.js` mit Zeitraum-Berechnung (Mo-So um Referenzdatum) und Konflikt-Aggregation pro (Tag, Projekt-ID). `listDeliveriesInRange(from, to)` in `src/lib/server/deliveries.js`.
+- **Referenz:** Linker Sidebar → "Wochenkalender".
+
+### 4.7 CO₂-Bilanz pro Lieferung, pro Projekt und global
+- **Beschreibung & Nutzen:** Jede Lieferung trägt ihren CO₂-Footprint, berechnet aus Material × Menge × Emissionsfaktor. Faktoren basieren vereinfacht auf KBOB-Ökobilanzdaten (z.B. Beton C25/30 = 270 kg CO₂/m³, Bewehrungsstahl = 750 kg/t, BSH-Holz = 50 kg/m³). Pro Projekt-Detail-Seite gibt es eine KPI-Kachel mit der Projekt-Summe, auf `/stats` zusätzlich eine globale CO₂-Sektion mit Total, **Top-5-Material-Ranking** und einer **lebensweltlichen Vergleichszahl** (Auto-Kilometer und Schweizer-Haushalts-Jahre). Damit wird die in der Ausgangslage zitierte "11 % globaler CO₂-Ausstoss aus dem Bau" konkret messbar für den eigenen Workflow.
+- **Wo umgesetzt:**
+  - **Frontend:** KPI-Kachel `Projekt-Detail-Seite`, CO₂-Sektion in `src/routes/stats/+page.svelte` (Balken-Chart Top-5 + Kontextzahl-Box).
+  - **Backend:** Material-Katalog in `src/lib/server/materials.js` mit `listMaterials`, `getMaterial`, `calculateCo2`. CO₂-Berechnung beim Insert/Update jeder Lieferung in `createDelivery`/`updateDelivery`, gespeichert als denormalisiertes Feld `co2Kg`. Aggregation `globalCo2Stats()` mit Top-5-Materialien-Ranking.
+  - **Datenbank:** Neue Collection `materials` (10 Bau-Materialien als Stammdaten).
+- **Referenz:** KPI-Kachel auf jeder Detail-Seite und Hauptbereich auf `/stats`.
+- **Disclaimer:** Faktoren sind Grössenordnungs-Schätzungen aus öffentlich zugänglichen Quellen, nicht für offizielle Bilanzierung tauglich (vermerkt in der UI).
+
+### 4.8 Notizen-Timeline pro Projekt (Append-only Audit-Log)
+- **Beschreibung & Nutzen:** Pro Projekt eine chronologische Timeline kurzer Bauleiter-Notizen mit Zeitstempel und Autor (z.B. "Statiker hat freigegeben", "Wetter-Warnung Donnerstag — Betonage vorziehen"). Bewusst **append-only ohne Edit-Funktion** — historische Notizen bleiben nachvollziehbar, was im Baukontext für Streitfälle relevant ist (vergleichbar mit einem Bautagebuch). Löschen ist möglich, aber durch Confirm-Dialog geschützt.
+- **Wo umgesetzt:**
+  - **Frontend:** Timeline-Sektion in `/projects/[id]/+page.svelte` mit Inline-Add-Form (Auto-Reset nach Submit via `use:enhance`-Callback), visuell als vertikale Marker-Linie.
+  - **Backend:** `src/lib/server/notes.js` mit `addNote`, `deleteNote`, `listNotesForProject`. Form Actions auf Projekt-Detail-Seite.
+  - **Datenbank:** Neue Collection `notes` (projectId, text, author, createdAt).
+- **Referenz:** Sichtbar auf jeder Projekt-Detail-Seite unter der Lieferungs-Tabelle.
 
 ## 5. Projektorganisation
 
