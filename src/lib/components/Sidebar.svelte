@@ -5,6 +5,7 @@
 	const navItems = [
 		{ href: '/', label: 'Projektüberblick', icon: 'list' },
 		{ href: '/projects/new', label: 'Neues Projekt', icon: 'plus' },
+		{ href: '/calendar', label: 'Wochenkalender', icon: 'calendar' },
 		{ href: '/stats', label: 'Statistiken', icon: 'chart' },
 		{ href: '/account', label: 'Konto Einstellungen', icon: 'gear' }
 	];
@@ -32,6 +33,8 @@
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
 					{:else if item.icon === 'plus'}
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+					{:else if item.icon === 'calendar'}
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
 					{:else if item.icon === 'chart'}
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 14l4-4 4 4 5-7"/></svg>
 					{:else if item.icon === 'gear'}
