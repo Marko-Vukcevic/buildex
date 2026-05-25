@@ -82,13 +82,13 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
 
 - **Skizzen:** Die drei Varianten als Hand-Skizzen mit kurzem Pro/Contra-Vermerk:
 
-  ![Variante A — Listen-orientiert](docs/sketches/01-variante-liste.svg)
-  *Variante A — Listen-orientiert (Capmo-Stil). Verworfen: zu Excel-artig, „Card-Gefühl" geht verloren.*
+  ![Variante A — Listen-orientiert](docs/sketches/variante-1.png)
+  *Variante A — Listen-orientiert (Capmo-Stil). Verworfen: zu Excel-artig, „Card-Gefühl" aus den Mockups geht verloren.*
 
-  ![Variante B — Projekt-Cards](docs/sketches/02-variante-cards.svg)
+  ![Variante B — Projekt-Cards](docs/sketches/variante-2.png)
   *Variante B — Projekt-Cards (Trello/Asana-Stil). **Gewählt** für Phase 1. Card-Metapher passt zum mentalen Modell der Bauleiter, Status-Badge sofort sichtbar, ist Figma-Mockup-konsistent.*
 
-  ![Variante C — Kalender-zentriert](docs/sketches/03-variante-kalender.svg)
+  ![Variante C — Kalender-zentriert](docs/sketches/variante-3.png)
   *Variante C — Kalender-zentriert (Wochenansicht als Startseite). Für Phase 1 zu ambitioniert (Projekt-Stammdaten würden sich verstecken), aber das Konflikt-Konzept war stark — in Phase 2 als eigene Route `/calendar` umgesetzt (siehe Kap. 4.6).*
 - **Skizzen:** Mehrere Hand-Skizzen pro Variante haben unterschiedliche Ansichten der Dashboard- und Detail-Seiten getestet (siehe Anhang/Repo).
 
@@ -299,11 +299,8 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
   3. Sind die Begriffe (Status-Bezeichnungen, „CO₂-Bilanz", „überfällig") für das mentale Modell des Bauumfelds passend?
   4. Welche Workflows fehlen aus Nutzer-Sicht, die für die Akzeptanz als Bauleitungs-Tool zentral wären?
 - **Vorgehen:** Moderierte Vor-Ort-Usability-Evaluation am **20.05.2026** im Rahmen des Pflichttermins der Kleinklasse (TZBISa, 12:00 Uhr, Raum SW 324). Think-Aloud-Methode mit Feedback-Grid-Protokollierung pro Testperson, anschliessend gemeinsame Diskussion zur Konsolidierung.
-- **Stichprobe:** **n = 4 Testpersonen, alle Mitstudierende aus der Kleinklasse:**
-  - Valdrin Dalipi (dalipval@students.zhaw.ch) – Wirtschaftsinformatik-Student, keine Bauerfahrung.
+- **Stichprobe:** **n = 1 Testperson** gemäss Vorgabe aus der Kleinklasse (Mindest-Sample für die Übung in Woche 14):
   - Aladin Kermo (kermoala@students.zhaw.ch) – Wirtschaftsinformatik-Student, keine Bauerfahrung.
-  - Hasler Joël (haslejoe@students.zhaw.ch) – Wirtschaftsinformatik-Student, keine Bauerfahrung.
-  - Ferreira Patrick (ferrepa1@students.zhaw.ch) – Wirtschaftsinformatik-Student, keine Bauerfahrung.
 
   Profil-Lücke ist bewusst dokumentiert: das Profil entspricht **nicht** der primären Zielgruppe (Bauführer/Bauleiter). Die Ergebnisse zeigen daher vor allem Usability-Aspekte aus *Laien-Sicht* (Lesbarkeit, Affordances, Begriffsverständnis). Domänen-spezifische Erkenntnisse (z.B. ob die Lieferungs-Status-Pipeline einem echten Bauwerkflow entspricht) werden in einer Folge-Iteration mit Bauleiter-Probanden geprüft.
 
@@ -331,11 +328,11 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
 
   | Issue-ID | Beschreibung | Schweregrad | Häufigkeit |
   |---|---|---|---|
-  | **3.5.1** | Anmeldeprozess fehlt (keine Login/Register/Logout-Funktion) | **3 — Gross** | 4 von 4 Testern |
-  | 3.5.2 | Status-Wechsel-Dropdown in Lieferungs-Tabelle wird nicht sofort als interaktiv erkannt | 2 — Klein | 2 von 4 |
-  | 3.5.3 | „Bearbeiten"-Button auf Detail-Seite wird auf den ersten Blick übersehen | 2 — Klein | 2 von 4 |
+  | **3.5.1** | Anmeldeprozess fehlt (keine Login/Register/Logout-Funktion) | **3 — Gross** | von Tester explizit als wichtigste Lücke genannt |
+  | 3.5.2 | Status-Wechsel-Dropdown in Lieferungs-Tabelle wird nicht sofort als interaktiv erkannt | 2 — Klein | beim ersten Versuch übersehen |
+  | 3.5.3 | „Bearbeiten"-Button auf Detail-Seite wird auf den ersten Blick übersehen | 2 — Klein | erst nach Hint gefunden |
 
-- **Zusammenfassung der Resultate:** Die zentrale Such-/Browse-Funktionalität (Dashboard, Kalender, Stats) wird intuitiv bedient. Der grösste konsistent identifizierte Mangel ist der **fehlende Anmeldeprozess** — alle 4 Tester suchen aktiv danach und können Aufgabe 5 nicht ausführen (Konsens-Issue). Kleinere Affordance-Schwächen (Status-Dropdown, Bearbeiten-Button) wurden von je 2 Testern erwähnt und sind in Folgeiterationen zu beheben.
+- **Zusammenfassung der Resultate:** Die zentrale Such-/Browse-Funktionalität (Dashboard, Kalender, Stats) wird intuitiv bedient. Der grösste identifizierte Mangel ist der **fehlende Anmeldeprozess** — der Tester sucht aktiv danach und kann Aufgabe 5 nicht ausführen. Kleinere Affordance-Schwächen (Status-Dropdown, Bearbeiten-Button) wurden ebenfalls beobachtet und sind in Folgeiterationen zu beheben. Für eine breitere Aussagekraft wäre eine zweite Test-Runde mit weiteren Probanden (insbesondere aus der primären Zielgruppe Bauleiter) sinnvoll.
 
 - **Abgeleitete Verbesserungen (Priorisierung):**
   1. **Issue 3.5.1 — Auth-System implementieren.** Hohe Priorität, blockiert die wahrgenommene Vollständigkeit. **→ Umgesetzt in Erweiterung 4.9** (Demo-Login/Register/Logout mit Cookie-Session, siehe Kap. 4.9).
