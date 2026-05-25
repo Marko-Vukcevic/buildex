@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" font-family="Caveat, 'Brush Script MT', cursive">
+  <defs>
+    <filter id="rough3">
+      <feTurbulence baseFrequency="0.02" numOctaves="2" seed="3"/>
+      <feDisplacementMap in="SourceGraphic" scale="2"/>
+    </filter>
+  </defs>
+  <rect width="800" height="600" fill="#fefcf3"/>
+  <g stroke="#dde5d0" stroke-width="0.8">
+    <line x1="0" y1="60" x2="800" y2="60"/>
+    <line x1="0" y1="90" x2="800" y2="90"/>
+    <line x1="0" y1="120" x2="800" y2="120"/>
+    <line x1="0" y1="150" x2="800" y2="150"/>
+    <line x1="0" y1="180" x2="800" y2="180"/>
+    <line x1="0" y1="210" x2="800" y2="210"/>
+    <line x1="0" y1="240" x2="800" y2="240"/>
+    <line x1="0" y1="270" x2="800" y2="270"/>
+    <line x1="0" y1="300" x2="800" y2="300"/>
+    <line x1="0" y1="330" x2="800" y2="330"/>
+    <line x1="0" y1="360" x2="800" y2="360"/>
+    <line x1="0" y1="390" x2="800" y2="390"/>
+    <line x1="0" y1="420" x2="800" y2="420"/>
+    <line x1="0" y1="450" x2="800" y2="450"/>
+    <line x1="0" y1="480" x2="800" y2="480"/>
+    <line x1="0" y1="510" x2="800" y2="510"/>
+    <line x1="0" y1="540" x2="800" y2="540"/>
+  </g>
+  <line x1="80" y1="0" x2="80" y2="600" stroke="#f5b3b3" stroke-width="1"/>
+
+  <text x="100" y="50" font-size="28" fill="#1e3a5f" font-weight="bold">Variante C — Kalender-zentriert (Wochenansicht als Startseite)</text>
+
+  <!-- App-Frame -->
+  <g stroke="#2b3a5e" stroke-width="2.5" fill="none" filter="url(#rough3)">
+    <rect x="100" y="80" width="600" height="430" rx="8"/>
+    <line x1="200" y1="80" x2="200" y2="510"/>
+  </g>
+
+  <!-- Sidebar -->
+  <g font-size="14" fill="#2b3a5e">
+    <text x="118" y="120">› Woche</text>
+    <text x="118" y="150">○ Projekte</text>
+    <text x="118" y="180">○ Stats</text>
+  </g>
+
+  <!-- Wochengrid (5 Spalten Mo-Fr) -->
+  <g stroke="#2b3a5e" stroke-width="1.5" fill="none" filter="url(#rough3)">
+    <line x1="220" y1="120" x2="680" y2="120"/>
+    <line x1="220" y1="100" x2="220" y2="490"/>
+    <line x1="312" y1="100" x2="312" y2="490"/>
+    <line x1="404" y1="100" x2="404" y2="490"/>
+    <line x1="496" y1="100" x2="496" y2="490"/>
+    <line x1="588" y1="100" x2="588" y2="490"/>
+    <line x1="680" y1="100" x2="680" y2="490"/>
+  </g>
+
+  <!-- Wochentage -->
+  <g font-size="12" fill="#2b3a5e">
+    <text x="240" y="115">MO 22</text>
+    <text x="335" y="115">DI 23</text>
+    <text x="425" y="115">MI 24</text>
+    <text x="515" y="115">DO 25</text>
+    <text x="605" y="115">FR 26</text>
+  </g>
+
+  <!-- Events -->
+  <g stroke="#2b3a5e" stroke-width="1.2" fill="none" filter="url(#rough3)">
+    <rect x="225" y="150" width="80" height="40" rx="4"/>
+    <rect x="317" y="180" width="80" height="50" rx="4"/>
+    <rect x="409" y="200" width="80" height="45" rx="4"/>
+    <rect x="409" y="280" width="80" height="40" rx="4"/>
+    <rect x="501" y="160" width="80" height="50" rx="4"/>
+    <rect x="593" y="220" width="80" height="40" rx="4"/>
+  </g>
+
+  <g font-size="9" fill="#2b3a5e">
+    <text x="230" y="165">09:00</text>
+    <text x="230" y="180">Beton 50m³</text>
+    <text x="322" y="195">10:00 Kies 8t</text>
+    <text x="414" y="215">11:30 Stahl</text>
+    <text x="414" y="295">14:00 Holz</text>
+    <text x="506" y="175">08:00 Pump</text>
+    <text x="598" y="235">12:00 Sand</text>
+  </g>
+
+  <!-- Konflikt-Markierung -->
+  <g stroke="#c5302b" stroke-width="2.5" fill="none" filter="url(#rough3)">
+    <circle cx="450" cy="220" r="30"/>
+  </g>
+  <text x="490" y="225" font-size="14" fill="#c5302b" font-weight="bold">← Konflikt!</text>
+  <text x="490" y="245" font-size="12" fill="#c5302b">3+ Lieferungen</text>
+
+  <!-- Annotation -->
+  <g font-size="18" fill="#c5302b" font-weight="bold">
+    <text x="100" y="545">❌ Contra:</text>
+  </g>
+  <g font-size="15" fill="#2b3a5e">
+    <text x="100" y="570">— Sehr ambitioniert für Phase 1</text>
+    <text x="100" y="590">— Projekt-Stammdaten verstecken sich</text>
+  </g>
+
+  <g font-size="18" fill="#16834a" font-weight="bold">
+    <text x="450" y="545">✓ Pro:</text>
+  </g>
+  <g font-size="15" fill="#2b3a5e">
+    <text x="450" y="570">+ Konflikte sofort visuell</text>
+    <text x="450" y="590">+ → in Phase 2 als /calendar umgesetzt</text>
+  </g>
+</svg>

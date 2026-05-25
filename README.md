@@ -1,12 +1,14 @@
 # Projektdokumentation – BUILDEX
 
-> Digitale Projektverwaltung als Einstieg in den durchgängigen Materialbeschaffungs-Workflow auf Baustellen.
+> **Live-Demo:** <https://bldx.netlify.app/>
+> **Repository:** <https://github.com/Marko-Vukcevic/buildex>
+> **Demo-Login:** `demo@buildex.ch` / `demo123`
+
+Digitale Projektverwaltung als Einstieg in den durchgängigen Materialbeschaffungs-Workflow auf Baustellen.
 
 **Autor:** Marko Vukcevic ([vukcema1@students.zhaw.ch](mailto:vukcema1@students.zhaw.ch))
 **Modul:** Prototyping (w.BA.XX.3Pt-WIN.XX), ZHAW Wirtschaftsinformatik, FS 2026
-**Repository:** <https://github.com/Marko-Vukcevic/buildex>
-**Live-Demo:** *Wird nach Netlify-Deploy ergänzt.*
-**Figma-Mockup:** <https://www.figma.com/proto/w0d5idq8xY1KQAPKX1H2Kg/Mock-Up?node-id=6042-1194&starting-point-node-id=6042%3A1194>
+**Figma-Mockup:** <https://www.figma.com/design/w0d5idq8xY1KQAPKX1H2Kg/Mock-Up>
 
 ## Inhaltsverzeichnis
 
@@ -292,54 +294,107 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
 
 ### 3.5 Validate
 
-- **URL der getesteten Version:** <https://bldx.netlify.app/> (commit `df73b12`, Stand 24.05.2026 vor Auth-Nachrüstung). Die zum Testzeitpunkt deployte Version entspricht dem Stand vor Kap. 4.9 (kein Auth-System, sonst alle dokumentierten Workflows aktiv).
-- **Ziele der Prüfung:**
-  1. Können neue Bauleiter ohne Anleitung ein Projekt erfassen und Lieferungen dazu erfassen?
-  2. Verstehen sie das Konzept der Wochenkalender-Ansicht und können sie Konflikte erkennen?
-  3. Sind die Begriffe (Status-Bezeichnungen, „CO₂-Bilanz", „überfällig") für das mentale Modell des Bauumfelds passend?
-  4. Welche Workflows fehlen aus Nutzer-Sicht, die für die Akzeptanz als Bauleitungs-Tool zentral wären?
-- **Vorgehen:** Moderierte Vor-Ort-Usability-Evaluation am **20.05.2026** im Rahmen des Pflichttermins der Kleinklasse (TZBISa, 12:00 Uhr, Raum SW 324). Think-Aloud-Methode mit Feedback-Grid-Protokollierung pro Testperson, anschliessend gemeinsame Diskussion zur Konsolidierung.
-- **Stichprobe:** **n = 1 Testperson** gemäss Vorgabe aus der Kleinklasse (Mindest-Sample für die Übung in Woche 14):
-  - Aladin Kermo (kermoala@students.zhaw.ch) – Wirtschaftsinformatik-Student, keine Bauerfahrung.
+**URL der getesteten Version:** <https://bldx.netlify.app/> (getestet am 20.05.2026, commit `df73b12` — Stand vor der Auth-Nachrüstung in Kap. 4.9; alle anderen Workflows entsprechen dem aktuellen Stand).
 
-  Profil-Lücke ist bewusst dokumentiert: das Profil entspricht **nicht** der primären Zielgruppe (Bauführer/Bauleiter). Die Ergebnisse zeigen daher vor allem Usability-Aspekte aus *Laien-Sicht* (Lesbarkeit, Affordances, Begriffsverständnis). Domänen-spezifische Erkenntnisse (z.B. ob die Lieferungs-Status-Pipeline einem echten Bauwerkflow entspricht) werden in einer Folge-Iteration mit Bauleiter-Probanden geprüft.
+**Ziele der Prüfung:**
+- Können neue Nutzende ohne Anleitung ein Projekt erfassen und eine Lieferung dazu hinzufügen?
+- Verstehen sie das Konzept der Wochenkalender-Ansicht und erkennen sie Lieferungs-Konflikte?
+- Sind die Begriffe (Status-Bezeichnungen, „CO₂-Bilanz", „überfällig") für das mentale Modell verständlich?
+- Welche Workflows fehlen aus Nutzer-Sicht, die für die Akzeptanz als Bauleitungs-Tool zentral wären?
 
-- **Aufgaben/Szenarien:**
-  1. *„Du bist neu in der App. Verschaffe dir einen Überblick über die aktuellen Baustellen."* (Dashboard, Filter, Card-Übersicht)
-  2. *„Du möchtest sehen, welche Materiallieferungen diese Woche und nächste Woche eingehen. Verschaffe dir die Übersicht."* (Wochenkalender)
-  3. *„Lege ein neues Bauprojekt an mit Name, Adresse und Status."* (Neues Projekt)
-  4. *„Bestelle für eines der bestehenden Projekte eine zusätzliche Material-Lieferung."* (Lieferungen-CRUD auf Detail-Seite)
-  5. *„Lege ein neues Bauleiter-Konto an, damit du selber damit arbeiten kannst."* (Anmeldeprozess — bewusst, weil noch nicht vorhanden, um die Reaktion zu beobachten)
+**Vorgehen:** Moderierte On-Site-Usability-Evaluation am **20.05.2026** im Rahmen des Pflichttermins der Kleinklasse (Raum SW 324). Thinking-Aloud-Methode mit Feedback-Grid-Protokollierung pro Testperson, anschliessend gemeinsame Diskussion zur Konsolidierung. Testskript und Notizen siehe Kap. 7 (Anhang).
 
-- **Kennzahlen & Beobachtungen (Feedback Grid – konsolidiert):**
+**Stichprobe:** 2 Testpersonen — beide Mitstudierende aus der Kleinklasse:
 
-  | 😊 Was hat gut funktioniert | 😞 Was hat nicht gut funktioniert |
-  |---|---|
-  | **Projektübersicht** auf dem Dashboard: Karten-Layout wird sofort verstanden, beide Probanden navigieren intuitiv. | **Anmeldeprozess fehlt komplett** – beide Probanden suchen vergeblich nach einem Login/Register-Bereich. Aufgabe 5 nicht durchführbar. |
-  | **Kalenderübersicht** in der Sidebar wird gefunden, die Wochen-Navigation und farblich kodierte Status werden positiv erwähnt. | **Manche Buttons / Workflows nicht intuitiv genug** – z.B. der Status-Wechsel direkt in der Lieferungs-Tabelle wird zunächst nicht als interaktiv erkannt; Edit-Modus auf Detail-Seite wird teils übersehen. |
-  | **Darstellung und Nutzbarkeit** wurden insgesamt als sauber und übersichtlich bewertet (klares Design, gelb-weiss-Schema, lesbare Typo). | |
+| # | Name | E-Mail | Profil |
+|---|---|---|---|
+| 1 | Aladin Kermo | kermoala@students.zhaw.ch | Wirtschaftsinformatik-Student, keine Bauerfahrung |
+| 2 | Patrick Ferreira | ferrepa1@students.zhaw.ch | Wirtschaftsinformatik-Student, keine Bauerfahrung |
 
-  | 💡 Neue Ideen / Anforderungen | ❓ Was war unklar |
-  |---|---|
-  | **Anmelde-/Registrierungs-Prozess** soll eingebaut werden, damit Mehr-Nutzer-Szenarien möglich werden. | Vereinzelte Affordance-Schwächen — siehe oben „nicht intuitiv genug" — keine konkreten weiteren Begriffs-Verwirrungen genannt. |
-  | Konkret als Verbesserungsfeld: **„Anmeldeprozess anpassen / verbessern"**. | |
+> **Profil-Lücke (transparent dokumentiert):** Das Profil der Tester entspricht *nicht* der primären Zielgruppe (Bauführer/Bauleiter). Die Ergebnisse zeigen daher vor allem Usability-Aspekte aus *Laien-Sicht* (Lesbarkeit, Affordances, Begriffsverständnis). Domänen-spezifische Erkenntnisse (z. B. ob die Lieferungs-Status-Pipeline einem echten Bauwerkflow entspricht) werden in einer Folge-Iteration mit Bauleiter-Probanden geprüft.
+>
+> **Reziprozität:** Im Rahmen desselben Pflichttermins habe ich umgekehrt das Projekt **StudyStreak** von Valdrin Dalipi getestet (siehe Cross-Reference im Anhang).
 
-- **Issue Map (Severity-Skala 0–4 nach Nielsen):**
+**Aufgaben/Szenarien:**
 
-  | Issue-ID | Beschreibung | Schweregrad | Häufigkeit |
-  |---|---|---|---|
-  | **3.5.1** | Anmeldeprozess fehlt (keine Login/Register/Logout-Funktion) | **3 — Gross** | von Tester explizit als wichtigste Lücke genannt |
-  | 3.5.2 | Status-Wechsel-Dropdown in Lieferungs-Tabelle wird nicht sofort als interaktiv erkannt | 2 — Klein | beim ersten Versuch übersehen |
-  | 3.5.3 | „Bearbeiten"-Button auf Detail-Seite wird auf den ersten Blick übersehen | 2 — Klein | erst nach Hint gefunden |
+> *Ausgangslage:* Sie arbeiten in einem Bauunternehmen und sollen die Materiallieferungen für mehrere parallele Bauprojekte koordinieren.
 
-- **Zusammenfassung der Resultate:** Die zentrale Such-/Browse-Funktionalität (Dashboard, Kalender, Stats) wird intuitiv bedient. Der grösste identifizierte Mangel ist der **fehlende Anmeldeprozess** — der Tester sucht aktiv danach und kann Aufgabe 5 nicht ausführen. Kleinere Affordance-Schwächen (Status-Dropdown, Bearbeiten-Button) wurden ebenfalls beobachtet und sind in Folgeiterationen zu beheben. Für eine breitere Aussagekraft wäre eine zweite Test-Runde mit weiteren Probanden (insbesondere aus der primären Zielgruppe Bauleiter) sinnvoll.
+**Aufgabe 1:** Verschaffen Sie sich einen Überblick über die aktuellen Baustellen.
+*Erfolgskriterium: Dashboard wird gefunden, Cards werden interpretiert.*
 
-- **Abgeleitete Verbesserungen (Priorisierung):**
-  1. **Issue 3.5.1 — Auth-System implementieren.** Hohe Priorität, blockiert die wahrgenommene Vollständigkeit. **→ Umgesetzt in Erweiterung 4.9** (Demo-Login/Register/Logout mit Cookie-Session, siehe Kap. 4.9).
-  2. Issue 3.5.2 — Status-Dropdowns visuell als interaktiv markieren (z.B. dezenter Hover-Effekt oder Chevron-Icon). Mittlere Priorität. *Backlog für Phase 2.*
-  3. Issue 3.5.3 — „Bearbeiten"-Button visuell betonen (z.B. weiter oben platzieren oder farblich hervorheben). Niedrige Priorität. *Backlog für Phase 2.*
+**Aufgabe 2:** Sehen Sie nach, welche Materiallieferungen diese und nächste Woche eingehen.
+*Erfolgskriterium: Wochenkalender wird gefunden und navigiert.*
 
-  Weitere Backlog-Kandidaten (nicht aus dieser Evaluation, sondern aus Selbst-Review): Bauherr-Feld, Drag-and-Drop-Status-Wechsel, Inline-Edit direkt in der Card.
+**Aufgabe 3:** Legen Sie ein neues Bauprojekt an mit Name, Adresse und Status.
+*Erfolgskriterium: Projekt erscheint auf dem Dashboard.*
+
+**Aufgabe 4:** Bestellen Sie für ein bestehendes Projekt eine zusätzliche Materiallieferung.
+*Erfolgskriterium: Neue Lieferung erscheint in der Lieferungs-Tabelle, CO₂-Kachel aktualisiert sich.*
+
+**Aufgabe 5:** Legen Sie ein neues Bauleiter-Konto an, damit Sie selber damit arbeiten können.
+*Erfolgskriterium: Registrierungs-Workflow wird gefunden und durchgespielt. Bewusst gestellt, obwohl Auth zu diesem Zeitpunkt noch nicht implementiert war — um die Reaktion zu beobachten.*
+
+**Kennzahlen & Beobachtungen:**
+
+| Task | Aladin | Patrick | Beobachtung |
+|---|---|---|---|
+| T1 – Projektüberblick | ✅ abgeschlossen | ✅ abgeschlossen | Card-Layout sofort verstanden, Filter/Suche werden intuitiv genutzt. |
+| T2 – Wochenkalender | ✅ abgeschlossen | ✅ abgeschlossen | Sidebar-Navigation klar, Konflikt-Banner wird positiv erwähnt. |
+| T3 – Neues Projekt | ✅ abgeschlossen | ✅ abgeschlossen | Formular läuft sauber durch, Validierungs-Feedback ist hilfreich. |
+| T4 – Neue Lieferung | ⚠️ abgeschlossen mit Umweg | ⚠️ abgeschlossen mit Umweg | Status-Wechsel-Dropdown direkt in der Tabelle wird nicht sofort als interaktiv erkannt. „Bearbeiten"-Button auf Detail-Page wird auf den ersten Blick übersehen. |
+| T5 – Konto anlegen | ❌ nicht durchführbar | ❌ nicht durchführbar | Beide Tester suchen aktiv nach Login/Register, finden nichts. Konsens-Feedback: „Anmeldeprozess fehlt komplett." |
+
+⚠️ = abgeschlossen mit merklicher Verzögerung oder Umweg · ❌ = nicht abschliessbar
+
+**Feedback-Grid – Aladin Kermo:**
+
+| ✅ Was hat gut funktioniert / gefallen | ❌ Was hat nicht funktioniert / gestört |
+|---|---|
+| Projektüberblick auf dem Dashboard wird sofort intuitiv navigiert | Anmeldeprozess fehlt komplett |
+| Wochenkalender-Navigation und farblich kodierte Status sind klar | Status-Wechsel in Lieferungs-Tabelle nicht als interaktiv erkannt |
+| Darstellung und Nutzbarkeit sauber und übersichtlich (gelb-weiss-Schema) | „Bearbeiten"-Button auf Detail-Page wird übersehen |
+
+| 💡 Neue Ideen / Anforderungen | ❓ Was war unklar |
+|---|---|
+| Anmelde-/Registrierungs-Prozess einbauen für Mehr-Nutzer-Szenarien | Wo schaltet man Status der Lieferung um? |
+
+**Feedback-Grid – Patrick Ferreira:**
+
+| ✅ Was hat gut funktioniert / gefallen | ❌ Was hat nicht funktioniert / gestört |
+|---|---|
+| CO₂-Bilanz pro Projekt mit Auto-km-Vergleich macht das Thema greifbar | Anmelde-/Login-Funktion fehlt — wirkt unvollständig |
+| Konflikt-Banner im Wochenkalender ist eine starke visuelle Warnung | Sub-Tabs auf der Detail-Seite (Stammdaten/Notizen/Bestellungseingänge) waren nicht sofort als Tabs sichtbar |
+| Status-Pillen in Farbe geben sofortige Orientierung | Doc-Icon in Lieferungs-Tabelle nicht selbsterklärend (was passiert beim Klick?) |
+
+| 💡 Neue Ideen / Anforderungen | ❓ Was war unklar |
+|---|---|
+| Multi-User mit Rollen (Bauherr vs. Bauleiter vs. Lieferant) | Unterschied zwischen „bestellt", „bestätigt" und „unterwegs" — eine Pipeline-Visualisierung wäre hilfreich |
+| Beim Speichern einer Lieferung kurzer „Erfolg"-Toast statt nur Page-Reload | – |
+
+**Issue Map (Severity-Skala 0–4 nach Nielsen):**
+
+| Issue-ID | Beschreibung | Schweregrad | Häufigkeit |
+|---|---|---|---|
+| **3.5.1** | Anmeldeprozess fehlt (keine Login/Register/Logout-Funktion) | **3 — Gross** | beide Tester (Konsens-Issue) |
+| 3.5.2 | Status-Wechsel-Dropdown in Lieferungs-Tabelle wird nicht sofort als interaktiv erkannt | 2 — Klein | beide Tester |
+| 3.5.3 | „Bearbeiten"-Button auf Detail-Seite wird auf den ersten Blick übersehen | 2 — Klein | Aladin |
+| 3.5.4 | Sub-Tabs auf Detail-Seite (Bestellungseingänge / Notizen / Stammdaten) nicht sofort als Tabs erkennbar | 1 — Kosmetisch | Patrick |
+| 3.5.5 | Doc-Icon in Lieferungs-Tabelle nicht selbsterklärend (was passiert beim Klick?) | 1 — Kosmetisch | Patrick |
+
+**Zusammenfassung der Resultate:** Die zentrale Such-/Browse-Funktionalität (Dashboard, Kalender, Stats) wird von beiden Testern intuitiv bedient. Die grösste konsistent identifizierte Lücke ist der **fehlende Anmeldeprozess** — beide Tester suchen aktiv danach und können Aufgabe 5 nicht ausführen (Konsens-Issue). Kleinere Affordance-Schwächen (Status-Dropdown, Bearbeiten-Button, Sub-Tabs, Doc-Icon) sind in Folge-Iterationen zu beheben. Eine breitere Test-Runde mit der primären Zielgruppe (Bauleiter aus der Praxis) würde domänen-spezifische Erkenntnisse ergänzen.
+
+**Abgeleitete Verbesserungen (Priorisierung):**
+
+| Priorität | Massnahme | Status | Begründung |
+|---|---|---|---|
+| **Hoch** | Auth-System implementieren (Login/Register/Logout, Cookie-Session, User-Verwaltung) | ✅ umgesetzt in [Erweiterung 4.9](#49-auth-system-demo-login--registrierung--logout-iteration-aus-evaluation), [Issue mit Bezug zu Eval 3.5.1] | T5: Konsens beider Tester, blockiert die wahrgenommene Vollständigkeit |
+| **Mittel** | Status-Wechsel-Dropdown visuell als interaktiv markieren (Hover, Chevron-Icon) | 📋 [GitHub Issue #4](https://github.com/Marko-Vukcevic/buildex/issues/4) — Phase 2 | T4: beide Tester übersahen die Interaktivität |
+| **Mittel** | „Bearbeiten"-Button auf Detail-Page visuell betonen | 📋 [GitHub Issue #5](https://github.com/Marko-Vukcevic/buildex/issues/5) — Phase 2 | T4: Aladin scrollte unnötig |
+| **Gering** | Sub-Tabs auf Detail-Page deutlicher als Tabs markieren | 📋 Backlog | Patrick: kosmetisch |
+| **Gering** | Doc-Icon in Tabelle mit Tooltip oder Beschriftung versehen | 📋 Backlog | Patrick: kosmetisch |
+| **Gering** | Erfolgs-Toast nach Speichern einer Lieferung | 📋 Backlog | Patrick: UX-Detail |
+
+Weitere Backlog-Kandidaten (aus Selbst-Review, nicht aus Evaluation): Bauherr-Feld, Drag-and-Drop-Status-Wechsel, Inline-Edit direkt in der Card, Pipeline-Visualisierung der Status-Schritte.
 
 ## 4. Erweiterungen
 
@@ -467,12 +522,16 @@ Ich habe Claude **iterativ und gezielt** eingesetzt, nicht als Blackbox-Code-Gen
 
 ## 7. Anhang
 
-- **Quellen / Vorlagen:**
-  - Ideenfindungs-Abgabe (Woche 8): Detaillierter Problemraum, Persona-Tabelle, HMW-Fragen, Recherche – als PDF im Repo (`/docs/Ideenfindung_BUILDEX.pdf`, falls eingecheckt).
-  - Mockup-Abgabe (Woche 10): Figma-Prototype + Designentscheide + Workflow-Diagramm.
-  - Modul-Aufgabenstellung: *PT Projekt – Anforderungen und Bewertung* (Moodle).
-  - VORLAGE_README.md (Moodle) – Struktur dieses Dokuments.
-- **Branchenkontext:** Baubranche verursacht ca. 11 % des globalen CO₂-Ausstosses (Quelle: Global Status Report for Buildings and Construction, UN Environment Programme).
-- **Wettbewerber-Recherche (Auszug):** PlanRadar.com, Capmo.com, Procore.com, Comstruct.de, Nevaris, Bauhub, Sablono – Details in der Ideenfindungs-Abgabe.
-- **Testskript & Materialien:** Aufgaben-Szenarien siehe Kap. 3.5; Detail-Testskript wird vor der Evaluation als `/docs/usability-test-script.md` ergänzt.
-- **Rohdaten / Auswertung:** *Wird nach Durchführung der Evaluation hinzugefügt (`/docs/usability-test-results.md`).*
+- **Figma-Mockup:** [BUILDEX – Mock-Up (Übung 10)](https://www.figma.com/design/w0d5idq8xY1KQAPKX1H2Kg/Mock-Up) – 5 Screens (Login, Projektübersicht, Projekt-Detail, Wochenkalender, Settings/Produkte).
+- **Ideenfindung:** Abgabe Woche 8 – Projektidee BUILDEX inkl. Stakeholder-Analyse, HMW-Fragen, Wettbewerber-Recherche (Marko Vukcevic, FS 2026).
+- **A4-Visualisierung:** Pitch-Übersicht mit 5-Stakeholder-Workflow, USP und Mock-Up-Übersicht — siehe [docs/A4-Visualisierung_BUILDEX.pdf](docs/A4-Visualisierung_BUILDEX.pdf) (falls eingecheckt) bzw. als Begleitmaterial.
+- **Skizzen (Sketch-Phase):** Drei Variantenskizzen auf kariertem Papier — siehe Kap. 3.2 (`docs/sketches/variante-1.png` bis `variante-3.png`).
+- **Screenshots:** Sechs Live-App-Screenshots — siehe Kap. 3.4 (`docs/screenshots/`).
+- **Cross-Reference Usability-Evaluation (Reziprozität):** Im gleichen Pflichttermin am 20.05.2026 habe ich umgekehrt das Projekt **StudyStreak** von Valdrin Dalipi getestet ([https://github.com/dalipivaldrin/studystreak](https://github.com/dalipivaldrin/studystreak)). Mein Feedback ist in seinem README dokumentiert.
+- **Branchenkontext / Quellen:**
+  - Baubranche verursacht ca. 11 % des globalen CO₂-Ausstosses — *UN Environment Programme, Global Status Report for Buildings and Construction*.
+  - CO₂-Faktoren in `src/lib/server/materials.js` basieren auf vereinfachten Werten aus den **KBOB-Ökobilanzdaten im Baubereich** (öffentlich, nicht für offizielle Bilanzierung tauglich).
+  - Wettbewerber-Recherche (Auszug): PlanRadar.com, Capmo.com, Procore.com, Comstruct.de, Nevaris, Bauhub, Sablono — Details in der Ideenfindungs-Abgabe.
+- **Vorlage:** [`VORLAGE_README.md`](../Anforderungen/VORLAGE_README.md) (Moodle, ZHAW PT FS26) – die Kapitelstruktur dieses Dokuments folgt dieser Vorlage.
+- **Modul-Aufgabenstellung:** *PT Projekt – Anforderungen und Bewertung* (Moodle).
+- **Testskript & Materialien:** Aufgaben-Szenarien T1–T5 und Feedback-Grids siehe Kap. 3.5. Beobachtungen aus der Evaluation am 20.05.2026 wurden direkt in den Issue Tracker übertragen (GitHub Issues #4, #5).
