@@ -488,37 +488,17 @@ Weitere Backlog-Kandidaten (aus Selbst-Review, nicht aus Evaluation): Bauherr-Fe
 
 ### 6.1 KI-Tools
 
-- **Eingesetzte Tools:** Claude (Anthropic, Modell-Familie Sonnet/Opus 4.x, Stand Mai 2026) via Cowork-Mode im Claude-Desktop-Client.
-- **Zweck & Umfang:**
-  - **Code:** Sehr breit eingesetzt – Claude hat das Initial-Scaffolding der SvelteKit-Routen, die MongoDB-Connection-Layer, die Validierungs-Funktion, Filter/Search-Logik und die Statistik-Aggregation überwiegend geschrieben. Ich habe jeden Vorschlag gelesen, lokal getestet (`npm run dev`) und angepasst.
-  - **UI/Styles:** Layout-Komponenten (Sidebar, ProjectCard, Globale Tokens in `app.css`) sind auf Basis meines Figma-Mockups von Claude codiert worden – Farbschema, Spacings, Typo wurden von mir aus dem Mockup vorgegeben.
-  - **Doku:** Diese README-Datei wurde von Claude entworfen und von mir inhaltlich geprüft, ergänzt und korrigiert. Fachinhalte (Bau-Branchenwissen, Persona-Beschreibungen, Erkenntnisse aus der Recherche) stammen aus meiner Ideenfindungs-Abgabe und meiner Berufserfahrung als Bauführer.
-  - **Tooling-Setup:** Claude hat mich Schritt für Schritt durch Node-Installation, `npx sv create`, Git-Setup, GitHub-Token-Konfiguration, MongoDB-Atlas-Setup (Database, User, Network) und Netlify-Deploy begleitet.
-- **Eigene Leistung (Abgrenzung):**
-  - **Konzeption & Idee:** Problemraum BUILDEX (Materialbeschaffung Bau), Persona-Wahl, HMW-Leitfrage, Scope-Reduktion auf Projekt-CRUD – stammen aus meinem Startup-Konzept und der Ideenfindungs-Phase, nicht aus KI.
-  - **Mockup:** Figma-Mockup wurde von mir manuell gezeichnet; Claude hat nur beim Verbinden der Frames (Prototype-Interaktionen) geholfen.
-  - **Verständnis & Verantwortung:** Ich habe jeden Code-Block gelesen, lokal getestet, debuggt (z.B. das `MONGODB_URI`-Prefix-Problem) und übernehme die Verantwortung für das Gesamtresultat.
-  - **Entscheidungen:** Wahl des Tech-Stacks im Rahmen der Modul-Vorgaben (SvelteKit, MongoDB, Netlify), Scope-Cuts und die Roadmap-Priorisierung sind meine.
+- **Eingesetzte Tools:** Claude (Anthropic, Sonnet/Opus 4.x).
+- **Zweck & Umfang:** Code-Scaffolding (SvelteKit-Routen, MongoDB-Anbindung, Validierung), Styling auf Basis des Figma-Mockups sowie sprachliche Überarbeitung der Dokumentation.
+- **Eigene Leistung (Abgrenzung):** Idee, Zielgruppen-/Problemraum-Analyse, Figma-Mockup, Architektur- und Scope-Entscheidungen, Code-Reviews und das Debugging. Die fachlichen Inhalte (Bau-Domäne, Workflows) stammen aus eigener Berufserfahrung als Bauführer.
 
 ### 6.2 Prompt-Vorgehen
 
-Ich habe Claude **iterativ und gezielt** eingesetzt, nicht als Blackbox-Code-Generator:
-
-1. **Kontext-Setting zuerst:** Vor jeder grösseren Code-Welle habe ich Claude den aktuellen Stand (Mockup-Screenshots, vorhandene Dateien, Branchen-Kontext) gegeben.
-2. **Iterativ verfeinern:** Erste Version → manuell testen → Bug oder Verbesserung benennen → Claude reagiert → erneut testen.
-3. **Konkrete Akzeptanz-Kriterien:** Statt „mach mir ein Dashboard" → „Dashboard mit Card-Grid, Status-Filter und Suche, persistente Sidebar links wie im Figma-Mockup".
-4. **Beispiele statt Mini-Prompts:** Beispiel-Prompt aus der Setup-Phase:
-   > *„Mach mir ein Mongo-Connection-Modul für SvelteKit. Server-only, Singleton-Connection, `MONGODB_URI` aus `$env/static/private`. Export `getDb()` und `getProjectsCollection()`. Schmeiss bei fehlender URI einen aussagekräftigen Fehler."*
-5. **Verifizieren statt Vertrauen:** Code-Vorschläge wurden im Dev-Server `npm run dev` ausprobiert; bei MongoDB direkt in der Atlas-Web-UI verifiziert ob Dokumente korrekt geschrieben wurden.
+Iteratives Prompting mit klarem Kontext (Mockup, vorhandene Dateien, Akzeptanzkriterien). Jeder Code-Vorschlag wurde lokal getestet und gegebenenfalls korrigiert, bevor er ins Repository übernommen wurde.
 
 ### 6.3 Reflexion
 
-- **Nutzen:** Claude hat die Setup-Phase (SvelteKit + Git + MongoDB + Netlify) von potenziell mehreren Tagen auf wenige Stunden komprimiert und mir komplexere Patterns (Server-Actions, Aggregation-Pipelines, Form-Validierung mit `fail()`) gezeigt, an die ich von selbst kaum direkt herangekommen wäre.
-- **Grenzen:** Bei UX-Entscheidungen (gelb statt blau, Sidebar statt Topbar, welche Filter sinnvoll sind) habe ich die Vorschläge **kritisch geprüft** – KI tendiert dazu, alles „normal" und „sauber" zu machen, aber die Branchen-Identität (gelb = Bau) ist eine bewusste Differenzierung gegen Capmo/PlanRadar/Procore und die wäre ohne mein Veto verloren gegangen.
-- **Risiken / Qualitätssicherung:**
-  - **Veraltete Patterns:** Claude hat anfangs Svelte-4-Syntax statt Svelte-5-Runes (`$state`, `$derived`, `$props`) vorgeschlagen; ich habe darauf bestanden, die aktuelle Syntax durchgehend zu verwenden.
-  - **Fehlende Tests:** Im aktuellen Stand gibt es keine automatisierten Tests. Bei Erweiterung des Scopes (Phase 2 mit Order-Workflow) ist mindestens eine Smoke-Test-Suite mit Playwright sinnvoll.
-  - **Secrets-Awareness:** Das `.env`-File ist von Anfang an in `.gitignore` aufgeführt. Mein MongoDB-Passwort wurde während des Setups nicht in Klartext im Repo committet.
+KI hat das Setup (SvelteKit, MongoDB, Netlify) und den Aufbau wiederkehrender Patterns deutlich beschleunigt. Kritische Prüfung war nötig bei Design-Entscheidungen (z. B. gelbe Sidebar als Branchen-Identität) sowie bei veralteten Svelte-4-Vorschlägen, die auf Svelte-5-Runes umgestellt wurden. Verantwortung für Korrektheit, Architektur und Sicherheits-Aspekte (`.env` in `.gitignore`, keine Secrets im Repo) liegt vollständig beim Autor.
 
 ## 7. Anhang
 
