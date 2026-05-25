@@ -8,65 +8,62 @@
 </svelte:head>
 
 <div class="auth-page">
+	<div class="logo-float">
+		<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-label="BUILDEX">
+			<circle cx="40" cy="40" r="40" fill="#fbc02d"/>
+			<g stroke="#1a1a1a" stroke-width="3.5" fill="none" stroke-linejoin="round">
+				<path d="M40 14 L60 30 L60 50 L40 66 L20 50 L20 30 Z"/>
+				<path d="M40 24 L52 33 L52 47 L40 56 L28 47 L28 33 Z"/>
+				<line x1="40" y1="14" x2="40" y2="24"/>
+				<line x1="40" y1="56" x2="40" y2="66"/>
+			</g>
+		</svg>
+	</div>
+
 	<div class="card">
-		<div class="brand">
-			<div class="logo">B</div>
-			<h1>BUILDEX</h1>
-		</div>
-		<p class="muted">Lege dein Bauleiter-Konto an.</p>
+		<h1>Registrierung</h1>
+		<p class="subtitle">Lege dein Bauleiter-Konto an</p>
 
 		<form method="POST" use:enhance class="form" novalidate>
-			<label>
-				<span>E-Mail *</span>
-				<input
-					name="email"
-					type="email"
-					autocomplete="email"
-					required
-					value={form?.values?.email ?? ''}
-					placeholder="bauleiter@firma.ch"
-				/>
-				{#if form?.errors?.email}<small class="err">{form.errors.email}</small>{/if}
-			</label>
+			<input
+				name="email"
+				type="email"
+				autocomplete="email"
+				required
+				value={form?.values?.email ?? ''}
+				placeholder="E-Mail"
+			/>
+			{#if form?.errors?.email}<small class="err">{form.errors.email}</small>{/if}
 
-			<label>
-				<span>Benutzername *</span>
-				<input
-					name="username"
-					type="text"
-					autocomplete="username"
-					required
-					minlength="3"
-					maxlength="30"
-					value={form?.values?.username ?? ''}
-					placeholder="z.B. mvukcevic"
-				/>
-				{#if form?.errors?.username}<small class="err">{form.errors.username}</small>{/if}
-			</label>
+			<input
+				name="username"
+				type="text"
+				autocomplete="username"
+				required
+				minlength="3"
+				maxlength="30"
+				value={form?.values?.username ?? ''}
+				placeholder="Benutzername"
+			/>
+			{#if form?.errors?.username}<small class="err">{form.errors.username}</small>{/if}
 
-			<label>
-				<span>Firmenname</span>
-				<input
-					name="company"
-					type="text"
-					autocomplete="organization"
-					value={form?.values?.company ?? ''}
-					placeholder="Bauunternehmung XY AG"
-				/>
-				{#if form?.errors?.company}<small class="err">{form.errors.company}</small>{/if}
-			</label>
+			<input
+				name="company"
+				type="text"
+				autocomplete="organization"
+				value={form?.values?.company ?? ''}
+				placeholder="Firmenname"
+			/>
+			{#if form?.errors?.company}<small class="err">{form.errors.company}</small>{/if}
 
-			<label>
-				<span>Passwort * <small class="hint">(mind. 6 Zeichen)</small></span>
-				<input name="password" type="password" autocomplete="new-password" required minlength="6" />
-				{#if form?.errors?.password}<small class="err">{form.errors.password}</small>{/if}
-			</label>
+			<input name="password" type="password" autocomplete="new-password" required minlength="6" placeholder="Passwort (mind. 6 Zeichen)" />
+			{#if form?.errors?.password}<small class="err">{form.errors.password}</small>{/if}
 
-			<button type="submit" class="btn-primary">Konto erstellen</button>
-
-			<p class="switch">
-				Schon ein Account? <a href="/login">Anmelden →</a>
+			<p class="login-line">
+				Schon ein Konto? <a href="/login">JETZT ANMELDEN</a>
 			</p>
+
+			<button type="submit" class="register-btn">KONTO ERSTELLEN</button>
 		</form>
 	</div>
 </div>
@@ -75,105 +72,87 @@
 	.auth-page {
 		min-height: 100vh;
 		display: flex;
+		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		padding: var(--sp-5);
-		background: linear-gradient(135deg, #fef3c7 0%, #fafafa 100%);
+		background: #fef3c7;
 	}
+	.logo-float {
+		width: 80px;
+		height: 80px;
+		margin-bottom: -40px;
+		z-index: 2;
+		filter: drop-shadow(0 4px 8px rgba(0,0,0,0.08));
+	}
+	.logo-float svg { width: 100%; height: 100%; display: block; }
 	.card {
 		width: 100%;
-		max-width: 420px;
-		background: white;
-		border: 1px solid var(--c-border);
-		border-radius: var(--radius-md);
-		padding: var(--sp-6);
-		box-shadow: var(--shadow-card);
-	}
-	.brand {
-		display: flex;
-		align-items: center;
-		gap: var(--sp-3);
-		margin-bottom: var(--sp-2);
-	}
-	.logo {
-		width: 44px;
-		height: 44px;
-		border-radius: 50%;
-		background: var(--c-yellow);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-weight: 800;
-		font-size: 1.4rem;
+		max-width: 460px;
+		background: #fef9d9;
+		border-radius: 16px;
+		padding: 64px 48px 48px;
+		box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+		text-align: center;
 	}
 	h1 {
-		margin: 0;
-		font-size: 1.5rem;
-		letter-spacing: 0.05em;
+		margin: 0 0 4px;
+		font-size: 1.75rem;
+		font-weight: 600;
 	}
-	.muted {
+	.subtitle {
 		color: var(--c-text-muted);
-		margin: 0 0 var(--sp-5);
+		margin: 0 0 var(--sp-6);
+		font-size: 0.95rem;
 	}
 	.form {
 		display: flex;
 		flex-direction: column;
-		gap: var(--sp-4);
-	}
-	label {
-		display: flex;
-		flex-direction: column;
-		gap: var(--sp-1);
-	}
-	label > span {
-		font-size: 0.85rem;
-		font-weight: 600;
-		color: var(--c-text-muted);
-	}
-	.hint {
-		font-weight: 400;
-		color: var(--c-text-faint, #94a3b8);
+		gap: var(--sp-3);
 	}
 	input {
-		padding: 10px 12px;
-		border: 1px solid var(--c-border-strong);
-		border-radius: var(--radius-sm);
+		padding: 14px 16px;
+		border: 1px solid #e5d97e;
+		border-radius: 8px;
 		font-size: 0.95rem;
+		font-family: inherit;
+		background: white;
+		width: 100%;
 	}
 	input:focus {
 		outline: none;
 		border-color: var(--c-yellow);
-		box-shadow: 0 0 0 3px rgba(251, 192, 45, 0.2);
+		box-shadow: 0 0 0 3px rgba(251, 192, 45, 0.25);
 	}
 	.err {
 		color: var(--c-danger);
 		font-size: 0.8rem;
+		text-align: left;
 	}
-	.btn-primary {
-		background: var(--c-yellow);
-		color: #422006;
-		border: none;
-		padding: 12px;
-		border-radius: var(--radius-sm);
-		font-weight: 600;
-		font-size: 1rem;
-		cursor: pointer;
-	}
-	.btn-primary:hover {
-		background: #f0b526;
-	}
-	.switch {
-		text-align: center;
+	.login-line {
 		font-size: 0.85rem;
 		color: var(--c-text-muted);
-		margin: 0;
+		margin: var(--sp-2) 0 var(--sp-3);
 	}
-	.switch a {
-		color: var(--c-text);
-		font-weight: 600;
+	.login-line a {
+		color: var(--c-yellow-dark);
+		font-weight: 700;
 		text-decoration: none;
+		letter-spacing: 0.04em;
 	}
-	.switch a:hover {
-		text-decoration: underline;
+	.register-btn {
+		background: var(--c-yellow);
+		color: var(--c-text);
+		border: none;
+		padding: 14px 28px;
+		border-radius: 8px;
+		font-weight: 700;
+		font-size: 1rem;
+		letter-spacing: 0.04em;
+		cursor: pointer;
+		align-self: center;
+	}
+	.register-btn:hover {
+		background: var(--c-yellow-dark);
 	}
 </style>

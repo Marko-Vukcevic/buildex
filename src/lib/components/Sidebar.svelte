@@ -1,6 +1,6 @@
 <script>
-	// Persistente Navigation links. Aktive Route wird hervorgehoben.
-	// Zeigt eingeloggten User (oder fallback "Max Muster" wenn kein User).
+	// Persistente Sidebar — Figma-Mockup-Style: gelber Hintergrund, weisse Icons.
+	// Zeigt eingeloggten User (oder Gast-Modus mit Login-Link).
 	import { page } from '$app/state';
 
 	let { user = null } = $props();
@@ -20,12 +20,23 @@
 
 	let displayName = $derived(user?.username ?? 'Max Muster');
 	let displayCompany = $derived(user?.company ?? 'Bauunternehmung XY AG');
-	let displayInitial = $derived((user?.username ?? 'B')[0].toUpperCase());
 </script>
 
 <aside>
+	<!-- BUILDEX-Logo: Diamant-Pattern auf gelbem Hintergrund (näher am Figma) -->
 	<div class="brand">
-		<div class="logo">{displayInitial}</div>
+		<div class="logo" aria-label="BUILDEX">
+			<svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+				<rect width="44" height="44" rx="6" fill="#1a1a1a"/>
+				<g stroke="#fbc02d" stroke-width="2.2" fill="none" stroke-linejoin="round">
+					<!-- Diamant-Pattern: stilisiertes B als Doppel-Diamond -->
+					<path d="M22 7 L33 16 L33 28 L22 37 L11 28 L11 16 Z"/>
+					<path d="M22 14 L28 19 L28 25 L22 30 L16 25 L16 19 Z"/>
+					<line x1="22" y1="7" x2="22" y2="14"/>
+					<line x1="22" y1="30" x2="22" y2="37"/>
+				</g>
+			</svg>
+		</div>
 		<div class="brand-text">
 			<div class="user-name">{displayName}</div>
 			<div class="company">{displayCompany}</div>
@@ -56,25 +67,27 @@
 	<div class="footer">
 		{#if user}
 			<div class="role">Angemeldet als {user.role}</div>
-			<a href="/logout" class="logout-link">Abmelden →</a>
+			<a href="/logout" class="footer-link">Abmelden →</a>
 		{:else}
 			<div class="role">Gast-Modus</div>
-			<a href="/login" class="login-link">Anmelden →</a>
+			<a href="/login" class="footer-link">Anmelden →</a>
 		{/if}
-		<div class="version">v0.2.0 – Prototype</div>
+		<div class="version">v0.3.0 – Prototype</div>
 	</div>
 </aside>
 
 <style>
 	aside {
-		background: white;
-		border-right: 1px solid var(--c-border);
+		/* Volle gelbe Sidebar wie im Figma-Mockup */
+		background: var(--c-yellow);
+		border-right: 1px solid var(--c-yellow-dark);
 		display: flex;
 		flex-direction: column;
 		padding: var(--sp-5);
 		position: sticky;
 		top: 0;
 		height: 100vh;
+		color: var(--c-text);
 	}
 
 	.brand {
@@ -82,29 +95,29 @@
 		gap: var(--sp-3);
 		align-items: center;
 		margin-bottom: var(--sp-6);
+		padding-bottom: var(--sp-4);
+		border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 	}
 
 	.logo {
 		width: 44px;
 		height: 44px;
-		border-radius: 50%;
-		background: var(--c-yellow);
-		color: var(--c-text);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-weight: 800;
-		font-size: 1.4rem;
 		flex-shrink: 0;
+	}
+	.logo :global(svg) {
+		width: 100%;
+		height: 100%;
+		display: block;
 	}
 
 	.user-name {
-		font-weight: 600;
+		font-weight: 700;
 		font-size: 0.95rem;
+		color: var(--c-text);
 	}
 
 	.company {
-		color: var(--c-text-muted);
+		color: rgba(0, 0, 0, 0.65);
 		font-size: 0.8rem;
 	}
 
@@ -112,7 +125,7 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 2px;
+		gap: 4px;
 	}
 
 	.nav-link {
@@ -122,21 +135,22 @@
 		padding: 10px 12px;
 		border-radius: var(--radius-sm);
 		text-decoration: none;
-		color: var(--c-text-muted);
+		color: rgba(0, 0, 0, 0.75);
 		font-size: 0.9rem;
-		font-weight: 500;
+		font-weight: 600;
 		transition: background 0.15s, color 0.15s;
 	}
 
 	.nav-link:hover {
-		background: #f5f5f5;
+		background: rgba(255, 255, 255, 0.35);
 		color: var(--c-text);
 	}
 
 	.nav-link.active {
-		background: var(--c-yellow);
+		background: white;
 		color: var(--c-text);
-		font-weight: 600;
+		font-weight: 700;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 	}
 
 	.icon {
@@ -154,24 +168,22 @@
 
 	.footer {
 		padding-top: var(--sp-4);
-		border-top: 1px solid var(--c-border);
+		border-top: 1px solid rgba(0, 0, 0, 0.08);
 		font-size: 0.75rem;
-		color: var(--c-text-faint);
+		color: rgba(0, 0, 0, 0.6);
 		line-height: 1.6;
 	}
 	.role {
 		font-weight: 600;
-		color: var(--c-text-muted);
+		color: rgba(0, 0, 0, 0.75);
 	}
-	.logout-link,
-	.login-link {
+	.footer-link {
 		display: inline-block;
 		margin: 2px 0;
-		color: var(--c-text-muted);
+		color: rgba(0, 0, 0, 0.7);
 		text-decoration: none;
 	}
-	.logout-link:hover,
-	.login-link:hover {
+	.footer-link:hover {
 		color: var(--c-text);
 		text-decoration: underline;
 	}
@@ -181,7 +193,7 @@
 			position: static;
 			height: auto;
 			border-right: none;
-			border-bottom: 1px solid var(--c-border);
+			border-bottom: 1px solid var(--c-yellow-dark);
 		}
 		nav {
 			flex-direction: row;

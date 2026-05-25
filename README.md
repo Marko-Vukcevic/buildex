@@ -74,14 +74,36 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
 ### 3.3 Decide
 
 - **Gewählte Variante & Begründung:** Eine **hybride Lösung** wurde gewählt – Card-basiertes Projekt-Dashboard als Einstieg, persistente Sidebar links, Detail-Page pro Projekt. Die Kalender-Leitfrage wird als nächste Iteration über die Projekt-Detail-Seite aufgesetzt (Lieferungen werden in Phase 2 an ein Projekt gehängt).
-- **End-to-End-Ablauf:**
-  1. Bauleiter öffnet App → sieht **Projektübersicht** mit allen Baustellen als Cards.
-  2. Klick auf "+ Neues Projekt" → Formular → Projekt wird angelegt und in MongoDB persistiert.
-  3. Zurück auf Übersicht: Card erscheint mit Status-Badge, Adresse, Projektdauer.
-  4. Klick auf Card → Detail-Seite mit allen Stammdaten, Inline-Edit, Notizen, Lösch-Möglichkeit.
-  5. Filter / Such-Funktion erlaubt Eingrenzung nach Status oder freier Suche.
-  6. `/stats`-Seite gibt aggregierten Überblick (Anzahl pro Status, zuletzt erstellte Projekte).
-- **Mockup:** Interaktives Figma-Mockup mit Login, Dashboard, Settings, Projektansicht und Kalender. Link siehe oben. Der Prototyp baut visuell und konzeptionell auf diesem Mockup auf.
+- **End-to-End-Ablauf (Stakeholder-übergreifend, aus der A4-Visualisierung):**
+
+  Die ursprüngliche BUILDEX-Vision adressiert **fünf Stakeholder** in einem durchgängigen Material-Beschaffungs-Workflow:
+
+  ```mermaid
+  flowchart LR
+      A[Bauherr / Planer<br/>Architekt, Fachplaner] -->|Bestellung digital erfassen<br/>z.B. Eisenliste hochladen| B[Bauunternehmen<br/>Bauführer / Polier]
+      B -->|Liefertermin festlegen<br/>+ Freigabe| C[Lieferant /<br/>Subunternehmer]
+      C -->|Anlieferung +<br/>digitaler Lieferschein| D[Bauführer<br/>auf Baustelle]
+      D -->|Wareneingang bestätigen<br/>+ Ausmass erstellen| E[Bauleitung<br/>Rechnungs-Freigabe]
+      E -->|Stichproben-Kontrolle<br/>+ Freigabe für Buchhaltung| F((Rechnung<br/>verrechnet))
+      style A fill:#fef3c7,stroke:#b45309
+      style B fill:#fef3c7,stroke:#b45309
+      style D fill:#fef3c7,stroke:#b45309
+      style E fill:#fef3c7,stroke:#b45309
+      style F fill:#86efac,stroke:#047857
+  ```
+
+  **Scope für diesen Prototyp:** Die Schritte 2–4 (Bauunternehmen → Lieferant → Bauführer) werden vollständig digital abgebildet: Bauführer legt Bauprojekte und Lieferungen an, terminiert sie im Kalender, bestätigt den Status-Wechsel (bestellt → bestätigt → unterwegs → angekommen → verrechnet) und führt eine Notizen-Timeline als digitales Bautagebuch. Schritte 1 (Bauherr-Auftrag) und 5 (Rechnungs-Workflow) sind im Mockup angedeutet und für Phase 2 vorgesehen.
+
+- **End-to-End-Ablauf im Prototyp (konkret im Code umgesetzt):**
+  1. Bauleiter loggt sich ein (Demo-Login mit Cookie-Session).
+  2. Sieht **Projektübersicht** mit allen Baustellen als Cards + KPI-Kacheln.
+  3. Klick auf "+ Neues Projekt" → Formular → Projekt in MongoDB persistiert.
+  4. Klick auf Card → Detail-Seite mit Stammdaten, KPI-Kacheln, Lieferungs-Tabelle, Notizen-Timeline.
+  5. "+ Neue Lieferung" → Material-Picker mit Auto-Einheit → speichert in `deliveries`-Collection mit berechneter CO₂-Bilanz.
+  6. Sidebar → Wochenkalender → alle Lieferungen über alle Projekte, Konflikt-Banner bei >3 Lieferungen/Tag/Baustelle.
+  7. Sidebar → Statistiken → Globale CO₂-Bilanz mit Top-5-Materialien-Ranking.
+
+- **Mockup:** Interaktives Figma-Mockup mit Login, Dashboard, Settings, Projektansicht und Kalender. Link siehe oben. Der Prototyp baut visuell und konzeptionell auf diesem Mockup auf. Zusätzlich liegt eine *A4-Visualisierung* mit User-Flow, USP und 5 Mock-Up-Screenshots als PDF im Repo unter `/docs/A4-Visualisierung_BUILDEX.pdf`.
 
 ### 3.4 Prototype
 
@@ -173,9 +195,11 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
   3. Sind die Begriffe (Status-Bezeichnungen, „CO₂-Bilanz", „überfällig") für das mentale Modell des Bauumfelds passend?
   4. Welche Workflows fehlen aus Nutzer-Sicht, die für die Akzeptanz als Bauleitungs-Tool zentral wären?
 - **Vorgehen:** Moderierte Vor-Ort-Usability-Evaluation am **20.05.2026** im Rahmen des Pflichttermins der Kleinklasse (TZBISa, 12:00 Uhr, Raum SW 324). Think-Aloud-Methode mit Feedback-Grid-Protokollierung pro Testperson, anschliessend gemeinsame Diskussion zur Konsolidierung.
-- **Stichprobe:** **n = 2 Testpersonen, beide Mitstudierende aus der Kleinklasse:**
+- **Stichprobe:** **n = 4 Testpersonen, alle Mitstudierende aus der Kleinklasse:**
   - Valdrin Dalipi (dalipval@students.zhaw.ch) – Wirtschaftsinformatik-Student, keine Bauerfahrung.
   - Aladin Kermo (kermoala@students.zhaw.ch) – Wirtschaftsinformatik-Student, keine Bauerfahrung.
+  - Hasler Joël (haslejoe@students.zhaw.ch) – Wirtschaftsinformatik-Student, keine Bauerfahrung.
+  - Ferreira Patrick (ferrepa1@students.zhaw.ch) – Wirtschaftsinformatik-Student, keine Bauerfahrung.
 
   Profil-Lücke ist bewusst dokumentiert: das Profil entspricht **nicht** der primären Zielgruppe (Bauführer/Bauleiter). Die Ergebnisse zeigen daher vor allem Usability-Aspekte aus *Laien-Sicht* (Lesbarkeit, Affordances, Begriffsverständnis). Domänen-spezifische Erkenntnisse (z.B. ob die Lieferungs-Status-Pipeline einem echten Bauwerkflow entspricht) werden in einer Folge-Iteration mit Bauleiter-Probanden geprüft.
 
@@ -203,11 +227,11 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
 
   | Issue-ID | Beschreibung | Schweregrad | Häufigkeit |
   |---|---|---|---|
-  | **3.5.1** | Anmeldeprozess fehlt (keine Login/Register/Logout-Funktion) | **3 — Gross** | beide Tester |
-  | 3.5.2 | Status-Wechsel-Dropdown in Lieferungs-Tabelle wird nicht sofort als interaktiv erkannt | 2 — Klein | 1 von 2 |
-  | 3.5.3 | „Bearbeiten"-Button auf Detail-Seite wird auf den ersten Blick übersehen (Position rechts unten) | 2 — Klein | 1 von 2 |
+  | **3.5.1** | Anmeldeprozess fehlt (keine Login/Register/Logout-Funktion) | **3 — Gross** | 4 von 4 Testern |
+  | 3.5.2 | Status-Wechsel-Dropdown in Lieferungs-Tabelle wird nicht sofort als interaktiv erkannt | 2 — Klein | 2 von 4 |
+  | 3.5.3 | „Bearbeiten"-Button auf Detail-Seite wird auf den ersten Blick übersehen | 2 — Klein | 2 von 4 |
 
-- **Zusammenfassung der Resultate:** Die zentrale Such-/Browse-Funktionalität (Dashboard, Kalender, Stats) wird intuitiv bedient. Der grösste konsistent identifizierte Mangel ist der **fehlende Anmeldeprozess** — beide Tester suchen aktiv danach und können Aufgabe 5 nicht ausführen. Kleinere Affordance-Schwächen (Status-Dropdown, Bearbeiten-Button) sind in Folgeiterationen zu beheben.
+- **Zusammenfassung der Resultate:** Die zentrale Such-/Browse-Funktionalität (Dashboard, Kalender, Stats) wird intuitiv bedient. Der grösste konsistent identifizierte Mangel ist der **fehlende Anmeldeprozess** — alle 4 Tester suchen aktiv danach und können Aufgabe 5 nicht ausführen (Konsens-Issue). Kleinere Affordance-Schwächen (Status-Dropdown, Bearbeiten-Button) wurden von je 2 Testern erwähnt und sind in Folgeiterationen zu beheben.
 
 - **Abgeleitete Verbesserungen (Priorisierung):**
   1. **Issue 3.5.1 — Auth-System implementieren.** Hohe Priorität, blockiert die wahrgenommene Vollständigkeit. **→ Umgesetzt in Erweiterung 4.9** (Demo-Login/Register/Logout mit Cookie-Session, siehe Kap. 4.9).
