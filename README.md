@@ -147,6 +147,26 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
   - **Gelb als Akzentfarbe.** Begründung: Branchen-Konnotation (Helme, Warnwesten, Markierungen) und Differenzierung gegen blau/grün-dominierte SaaS-Tools wie Procore.
   - **Mehrere Status-Badges (offen/laufend/pausiert/abgeschlossen).** Begründung: schnelle visuelle Erfassung des Projekt-Zustands ohne Drill-Down (*Visibility of system status*, Nielsen #1).
 
+- **Screenshots der wichtigsten Workflows** (Live-Stand https://bldx.netlify.app/, Mai 2026):
+
+  ![Anmeldung – Login-Card mit Diamant-Logo](docs/screenshots/Anmeldung_BLDX.png)
+  *Anmelde-Seite: Demo-Login (`demo@buildex.ch` / `demo123`) ist sichtbar dokumentiert, damit Dozierende ohne Konto einsteigen können. Login-Card mit BUILDEX-Diamant-Logo im gelben Kreis, „Bauunternehmer"-Subtitel und „JETZT REGISTRIEREN"-Link in Bau-Gelb (Iteration aus Eval-Issue 3.5.1, siehe Kap. 4.9).*
+
+  ![Projektüberblick – Dashboard mit Such-/Filter-Funktion](docs/screenshots/Projektüberblick_BLDX.png)
+  *Projektüberblick: Sidebar weiss mit gelber Aktiv-Pille, KPI-Streifen (Total/Laufend/Offen/Abgeschlossen), Suchleiste mit gelbem Lupe-Icon und Status-Dropdown oben, „+ Neues Projekt" rechts. 8 Projekt-Cards im Mockup-Stil mit Status-Badge, Adresse, Projektdauer und „ÖFFNEN" in Material-Blau.*
+
+  ![Projekt-Detail mit Lieferungs-Tabelle](docs/screenshots/Bestellungseingänge_BLDX.png)
+  *Projekt-Detail-Page (Wohnüberbauung Steinegg): Title + „Baustelle:"-Subtitle, vier KPI-Kacheln (Lieferungen total / Überfällig / Unterwegs+bestätigt / **CO₂-Bilanz 93.4 t**), Sub-Tab-Navigation (Bestellungseingänge / Notizen-Verlauf / Stammdaten), Tabelle mit Status-Pillen (grau verrechnet, blau unterwegs, orange bestätigt) und Document-Icons. Rechts oben die gelbe Filter/Edit-Pille (Toggle in den Bearbeiten-Modus).*
+
+  ![Wochenkalender mit Konflikt-Banner](docs/screenshots/Kalender_BLDX.png)
+  *Wochenkalender: Top-Bar mit `‹ Heute ›`-Pille und Day/Week/Month/Year-Tabs (Week aktiv gelb). Links Mini-Kalender mit farbigen Punkten unter Tagen, die die Anzahl Lieferungen anzeigen. Mitte: Wochen-Grid mit Stunden 07:00–18:00 und farbcodierten Lieferungs-Karten pro Status. Oben das **Konflikt-Banner** „⚠ 1 Tag mit Lieferungs-Konflikt": am Di 02.06. sind 4 Lieferungen auf der Baustelle Wohnüberbauung Steinegg geplant — die Konflikt-Detection markiert den Tag orange und warnt vor Koordinationsproblemen, bevor sie zu Verzögerungen führen.*
+
+  ![Statistiken mit CO₂-Bilanz](docs/screenshots/Statistiken_BLDX.png)
+  *Statistik-Page: Vier KPI-Kacheln (Projekte gesamt, Laufend, Offen, Abgeschlossen), Status-Verteilung als horizontale Balken-Charts, und die grüne **CO₂-Bilanz-Sektion** mit dem Gesamtwert 345.9 t — übersetzt in eine lebensweltliche Vergleichszahl: ~1'729'565 Auto-Kilometer oder ~86.5 Jahre eines Schweizer Haushalts. Darunter Top-5-Materialien nach CO₂-Beitrag (Beton C30/37 dominiert mit 103.5 t). Quelle: vereinfachte KBOB-Faktoren.*
+
+  ![Konto-Einstellungen mit Sub-Navigation](docs/screenshots/Einstellungen_BLDX.png)
+  *Konto-Einstellungen: Zweispaltiges Layout (links Sub-Navigation mit 8 Tabs: Geschäftsprofil, Benutzer, Datenschutz, Kalendereinstellungen, Produkte, Meldungen, Erinnerungen, Data Backup), rechts der Content. Aktiver Sub-Tab wird mit fettem schwarzem Text und einem vertikalen Strich rechts markiert (1:1 wie Figma-Mockup). Im Bild der Gast-Modus-Hinweis mit „Anmelden"- und „Registrieren"-CTAs, falls man nicht eingeloggt ist.*
+
 #### 3.4.2 Umsetzung (Technik)
 
 - **Technologie-Stack:**
