@@ -161,30 +161,64 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
 - **Besondere Entscheidungen / Trade-offs:**
   - **Kein TypeScript** – Lehrkontext, schnellere Iteration. Validierung kompensiert die fehlende statische Typprüfung.
   - **MongoDB statt SQL** – passt zum Modul-Kontext (Data Management deckt MongoDB ab) und liefert flexible Erweiterbarkeit für die kommenden Order/Delivery-Subdokumente.
-  - **Kein Auth** – einzelner Demo-User, das Ziel ist der CRUD-Workflow, nicht Auth-Logik (klar im Mockup begründet).
-  - **Adapter-Auto statt expliziter Netlify-Adapter** – funktioniert out-of-the-box, minimiert Konfigurations-Aufwand.
+  - **Kein Auth im ersten Wurf, später nachgerüstet** – ursprünglich war Auth bewusst out-of-scope (Fokus auf CRUD); nach der Usability-Evaluation am 20.05.2026 wurde das Issue *„Anmeldeprozess fehlt"* aufgenommen und ein Demo-Auth-System nachgebaut (siehe Kap. 4.9).
+  - **Explizit `@sveltejs/adapter-netlify` statt `adapter-auto`** – `adapter-auto` produzierte beim Netlify-Build ein leeres Publish-Verzeichnis, was zu einem 404 auf der deployten App führte. Erst der explizite Netlify-Adapter mit `netlify.toml` löste das Deployment-Problem.
 
 ### 3.5 Validate
 
-- **URL der getesteten Version:** Identisch mit der Live-Deploy-URL (s.o.). Eine separate Test-Deployment-Branch ist nicht vorgesehen, da der Code-Umfang im Modul-Rahmen klein ist.
+- **URL der getesteten Version:** <https://bldx.netlify.app/> (commit `df73b12`, Stand 24.05.2026 vor Auth-Nachrüstung). Die zum Testzeitpunkt deployte Version entspricht dem Stand vor Kap. 4.9 (kein Auth-System, sonst alle dokumentierten Workflows aktiv).
 - **Ziele der Prüfung:**
-  1. Können neue Bauleiter ohne Anleitung ein Projekt erfassen?
-  2. Finden sie zielsicher die Detail-Seite, um Daten zu korrigieren?
-  3. Ist die Status-Pipeline (Filter) für ihr mentales Modell verständlich?
-  4. Wirken Sidebar und Stats-Page **konsistent** mit dem Figma-Mockup?
-- **Vorgehen:** Geplant ist eine moderierte Remote-Usability-Evaluation (Think-Aloud) mit ca. fünf Personen aus dem Bauumfeld (Bauführer, Bauleiter, Planer). Jede Session dauert 20 Minuten und besteht aus drei aufgaben-basierten Szenarien und einer kurzen Abschluss-Befragung.
-- **Stichprobe:** Geplant n=5, gemischtes Profil (Erfahrungs-Bauleiter und neue Projektassistenten), schweizerischer Bau-Kontext.
-- **Aufgaben/Szenarien (Test-Skript-Auszug):**
-  1. *„Du bist neu in der App. Lege ein Projekt 'Wohnüberbauung Steinegg' mit der Adresse 'Badenerstrasse 26, Schlieren' an, Status laufend, geplante Dauer Januar 2026 bis Dezember 2026."*
-  2. *„Finde das eben angelegte Projekt und ergänze in den Notizen: 'Statiker = Müller AG'. Speichere die Änderung."*
-  3. *„Setze den Status des Projekts auf pausiert. Wo prüfst du, dass die Statistik den neuen Status zählt?"*
-- **Kennzahlen & Beobachtungen:** *Wird nach Durchführung ergänzt — Vorlage: Erfolgsquote pro Aufgabe, Zeitbedarf, Anzahl Hilfestellungen, qualitative Findings (Sprache, Affordances, fehlende Elemente).*
-- **Zusammenfassung der Resultate:** *Wird nach Durchführung ergänzt.*
-- **Abgeleitete Verbesserungen:** *Wird nach Durchführung ergänzt. Kandidaten sind: zusätzliches Feld „Bauherr"; Drag-and-Drop für Status-Wechsel; Inline-Edit in der Card statt Detail-Seite.*
+  1. Können neue Bauleiter ohne Anleitung ein Projekt erfassen und Lieferungen dazu erfassen?
+  2. Verstehen sie das Konzept der Wochenkalender-Ansicht und können sie Konflikte erkennen?
+  3. Sind die Begriffe (Status-Bezeichnungen, „CO₂-Bilanz", „überfällig") für das mentale Modell des Bauumfelds passend?
+  4. Welche Workflows fehlen aus Nutzer-Sicht, die für die Akzeptanz als Bauleitungs-Tool zentral wären?
+- **Vorgehen:** Moderierte Vor-Ort-Usability-Evaluation am **20.05.2026** im Rahmen des Pflichttermins der Kleinklasse (TZBISa, 12:00 Uhr, Raum SW 324). Think-Aloud-Methode mit Feedback-Grid-Protokollierung pro Testperson, anschliessend gemeinsame Diskussion zur Konsolidierung.
+- **Stichprobe:** **n = 2 Testpersonen, beide Mitstudierende aus der Kleinklasse:**
+  - Valdrin Dalipi (dalipval@students.zhaw.ch) – Wirtschaftsinformatik-Student, keine Bauerfahrung.
+  - Aladin Kermo (kermoala@students.zhaw.ch) – Wirtschaftsinformatik-Student, keine Bauerfahrung.
+
+  Profil-Lücke ist bewusst dokumentiert: das Profil entspricht **nicht** der primären Zielgruppe (Bauführer/Bauleiter). Die Ergebnisse zeigen daher vor allem Usability-Aspekte aus *Laien-Sicht* (Lesbarkeit, Affordances, Begriffsverständnis). Domänen-spezifische Erkenntnisse (z.B. ob die Lieferungs-Status-Pipeline einem echten Bauwerkflow entspricht) werden in einer Folge-Iteration mit Bauleiter-Probanden geprüft.
+
+- **Aufgaben/Szenarien:**
+  1. *„Du bist neu in der App. Verschaffe dir einen Überblick über die aktuellen Baustellen."* (Dashboard, Filter, Card-Übersicht)
+  2. *„Du möchtest sehen, welche Materiallieferungen diese Woche und nächste Woche eingehen. Verschaffe dir die Übersicht."* (Wochenkalender)
+  3. *„Lege ein neues Bauprojekt an mit Name, Adresse und Status."* (Neues Projekt)
+  4. *„Bestelle für eines der bestehenden Projekte eine zusätzliche Material-Lieferung."* (Lieferungen-CRUD auf Detail-Seite)
+  5. *„Lege ein neues Bauleiter-Konto an, damit du selber damit arbeiten kannst."* (Anmeldeprozess — bewusst, weil noch nicht vorhanden, um die Reaktion zu beobachten)
+
+- **Kennzahlen & Beobachtungen (Feedback Grid – konsolidiert):**
+
+  | 😊 Was hat gut funktioniert | 😞 Was hat nicht gut funktioniert |
+  |---|---|
+  | **Projektübersicht** auf dem Dashboard: Karten-Layout wird sofort verstanden, beide Probanden navigieren intuitiv. | **Anmeldeprozess fehlt komplett** – beide Probanden suchen vergeblich nach einem Login/Register-Bereich. Aufgabe 5 nicht durchführbar. |
+  | **Kalenderübersicht** in der Sidebar wird gefunden, die Wochen-Navigation und farblich kodierte Status werden positiv erwähnt. | **Manche Buttons / Workflows nicht intuitiv genug** – z.B. der Status-Wechsel direkt in der Lieferungs-Tabelle wird zunächst nicht als interaktiv erkannt; Edit-Modus auf Detail-Seite wird teils übersehen. |
+  | **Darstellung und Nutzbarkeit** wurden insgesamt als sauber und übersichtlich bewertet (klares Design, gelb-weiss-Schema, lesbare Typo). | |
+
+  | 💡 Neue Ideen / Anforderungen | ❓ Was war unklar |
+  |---|---|
+  | **Anmelde-/Registrierungs-Prozess** soll eingebaut werden, damit Mehr-Nutzer-Szenarien möglich werden. | Vereinzelte Affordance-Schwächen — siehe oben „nicht intuitiv genug" — keine konkreten weiteren Begriffs-Verwirrungen genannt. |
+  | Konkret als Verbesserungsfeld: **„Anmeldeprozess anpassen / verbessern"**. | |
+
+- **Issue Map (Severity-Skala 0–4 nach Nielsen):**
+
+  | Issue-ID | Beschreibung | Schweregrad | Häufigkeit |
+  |---|---|---|---|
+  | **3.5.1** | Anmeldeprozess fehlt (keine Login/Register/Logout-Funktion) | **3 — Gross** | beide Tester |
+  | 3.5.2 | Status-Wechsel-Dropdown in Lieferungs-Tabelle wird nicht sofort als interaktiv erkannt | 2 — Klein | 1 von 2 |
+  | 3.5.3 | „Bearbeiten"-Button auf Detail-Seite wird auf den ersten Blick übersehen (Position rechts unten) | 2 — Klein | 1 von 2 |
+
+- **Zusammenfassung der Resultate:** Die zentrale Such-/Browse-Funktionalität (Dashboard, Kalender, Stats) wird intuitiv bedient. Der grösste konsistent identifizierte Mangel ist der **fehlende Anmeldeprozess** — beide Tester suchen aktiv danach und können Aufgabe 5 nicht ausführen. Kleinere Affordance-Schwächen (Status-Dropdown, Bearbeiten-Button) sind in Folgeiterationen zu beheben.
+
+- **Abgeleitete Verbesserungen (Priorisierung):**
+  1. **Issue 3.5.1 — Auth-System implementieren.** Hohe Priorität, blockiert die wahrgenommene Vollständigkeit. **→ Umgesetzt in Erweiterung 4.9** (Demo-Login/Register/Logout mit Cookie-Session, siehe Kap. 4.9).
+  2. Issue 3.5.2 — Status-Dropdowns visuell als interaktiv markieren (z.B. dezenter Hover-Effekt oder Chevron-Icon). Mittlere Priorität. *Backlog für Phase 2.*
+  3. Issue 3.5.3 — „Bearbeiten"-Button visuell betonen (z.B. weiter oben platzieren oder farblich hervorheben). Niedrige Priorität. *Backlog für Phase 2.*
+
+  Weitere Backlog-Kandidaten (nicht aus dieser Evaluation, sondern aus Selbst-Review): Bauherr-Feld, Drag-and-Drop-Status-Wechsel, Inline-Edit direkt in der Card.
 
 ## 4. Erweiterungen
 
-> Über den Mindestumfang (Projekt-CRUD) hinaus wurden **acht Erweiterungen** umgesetzt — vier davon ergänzen den ursprünglichen Scope (Detail-Page, Filter, Stats, Validierung), vier weitere realisieren tatsächlich die in der Ideenfindung beschriebene Kern-Vision (Lieferungen, Wochenkalender, CO₂-Bilanz, Notizen-Timeline). Damit wird BUILDEX vom generischen Projekt-CRUD zu einem fachspezifischen Bauleitungs-Tool.
+> Über den Mindestumfang (Projekt-CRUD) hinaus wurden **neun Erweiterungen** umgesetzt — vier davon ergänzen den ursprünglichen Scope (Detail-Page, Filter, Stats, Validierung), vier weitere realisieren die in der Ideenfindung beschriebene Kern-Vision (Lieferungen, Wochenkalender, CO₂-Bilanz, Notizen-Timeline), und eine wurde **direkt aus der Usability-Evaluation abgeleitet** (Auth-System). Damit wird BUILDEX vom generischen Projekt-CRUD zu einem fachspezifischen Bauleitungs-Tool mit Multi-User-Fähigkeit.
 
 ### 4.1 Projekt-Detail-Seite mit Inline-Edit und Delete-Confirm
 - **Beschreibung & Nutzen:** Eigene Route `/projects/[id]` mit vollständigen Stammdaten, Notizen, Erstellungs-/Änderungs-Zeitstempel. Edit-Modus passiert inline auf derselben Seite (keine zusätzliche Navigation). Löschen erfordert eine native `confirm()`-Bestätigung (*Error prevention*, Nielsen #5).
@@ -245,6 +279,20 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
   - **Backend:** `src/lib/server/notes.js` mit `addNote`, `deleteNote`, `listNotesForProject`. Form Actions auf Projekt-Detail-Seite.
   - **Datenbank:** Neue Collection `notes` (projectId, text, author, createdAt).
 - **Referenz:** Sichtbar auf jeder Projekt-Detail-Seite unter der Lieferungs-Tabelle.
+
+### 4.9 Auth-System: Demo-Login / Registrierung / Logout (Iteration aus Evaluation)
+- **Beschreibung & Nutzen:** Vollständiger Anmelde-Workflow mit Login, Registrierung (E-Mail + Benutzername-Eindeutigkeitsprüfung, serverseitige Validierung, Passwort min. 6 Zeichen), Logout und persistenter Session via httpOnly-Cookie (30 Tage Laufzeit, `sameSite=lax`, `secure=true` für HTTPS). Sidebar zeigt entweder den eingeloggten Benutzer mit Firmenname und persönlichem Initial-Avatar oder Gast-Modus mit Login-Link; Account-Seite zeigt die echten Profildaten statt eines statischen Mockups. Zwei Demo-Accounts (`demo@buildex.ch` / `demo123` und `marko@buildex.ch` / `marko2026`) sind per Seed-Script angelegt, damit Reviewer ohne Registrierung einsteigen können. Die Demo-Credentials sind im Login-Formular sichtbar dokumentiert.
+- **Wo umgesetzt:**
+  - **Frontend:** `src/routes/login/+page.svelte` (Login-Form mit Demo-Hinweis), `src/routes/register/+page.svelte` (Registrierungs-Form mit Live-Validierung), `src/routes/logout/+page.server.js` (Cookie-Reset), `src/lib/components/Sidebar.svelte` (Login/Logout-Toggle, dynamischer Benutzername), `src/routes/account/+page.svelte` (Profil-Ansicht mit echten User-Daten oder Gast-Hinweis).
+  - **Backend:** `src/lib/server/users.js` mit `registerUser`, `loginUser`, `getUserById` (SHA-256 + Salt-Hashing per Node `crypto`). `src/lib/server/session.js` mit httpOnly-Cookie-Management. `src/hooks.server.js` als SvelteKit-Server-Hook, der bei jedem Request die Session-Cookie ausliest und den User an `event.locals.user` hängt. `src/routes/+layout.server.js` exponiert den User für alle Pages.
+  - **Datenbank:** Neue Collection `users` (email, username, passwordHash, salt, company, role, createdAt — mit Eindeutigkeitsindex auf email und username via Anwendungs-Validierung).
+- **Referenz:** Login-Page unter <https://bldx.netlify.app/login>, Demo-Credentials sind dort sichtbar.
+- **Aus Evaluation abgeleitet?:** **Ja — direkte Antwort auf Issue 3.5.1** aus der Usability-Evaluation am 20.05.2026. Beide Tester forderten explizit einen Anmeldeprozess, dieser war das einzige Issue mit Severity 3 (Gross).
+- **Bewusste Trade-offs / Disclaimer für die produktive Nutzung:**
+  - **SHA-256 + Salt ist Demo-Grade-Hashing.** Für ein echtes Produkt müsste `bcrypt` oder `argon2id` verwendet werden — beide bieten adaptive Cost-Faktoren gegen Brute-Force. Im Prototyp-Kontext bewusst vereinfacht, um keine native Build-Dependency einzuführen.
+  - **Session-Cookie speichert die User-ID direkt** (statt einer signierten Session-ID, die serverseitig nachgeschlagen wird). Für echte Sessions wäre ein signierter Token oder ein Server-side Session-Store (Redis/MongoDB) richtiger.
+  - **Kein Hard-Block für nicht-eingeloggte Nutzer.** Die App funktioniert auch im Gast-Modus weiter (alle Lese- und Schreib-Operationen). Das ist Absicht für die Bewertung — Dozenten können direkt mit den Daten interagieren ohne sich erst registrieren zu müssen.
+  - **Keine E-Mail-Verifikation, kein Passwort-Reset.** Für die nächste Iteration auf dem Backlog.
 
 ## 5. Projektorganisation
 
