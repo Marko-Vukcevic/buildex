@@ -1,6 +1,8 @@
 <script>
-	// Persistente Sidebar — Figma-Mockup-Style: gelber Hintergrund, weisse Icons.
-	// Zeigt eingeloggten User (oder Gast-Modus mit Login-Link).
+	// Persistente Sidebar im Figma-Mockup-Stil:
+	// - Weisser Hintergrund, schmal (~220px)
+	// - Avatar oben mit Username + Companyname
+	// - Active Nav-Item: gelbe Pille die rechts über die Sidebar hinausragt
 	import { page } from '$app/state';
 
 	let { user = null } = $props();
@@ -23,32 +25,29 @@
 </script>
 
 <aside>
-	<!-- BUILDEX-Logo: Diamant-Pattern auf gelbem Hintergrund (näher am Figma) -->
-	<div class="brand">
-		<div class="logo" aria-label="BUILDEX">
-			<svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
-				<rect width="44" height="44" rx="6" fill="#1a1a1a"/>
-				<g stroke="#fbc02d" stroke-width="2.2" fill="none" stroke-linejoin="round">
-					<!-- Diamant-Pattern: stilisiertes B als Doppel-Diamond -->
-					<path d="M22 7 L33 16 L33 28 L22 37 L11 28 L11 16 Z"/>
-					<path d="M22 14 L28 19 L28 25 L22 30 L16 25 L16 19 Z"/>
-					<line x1="22" y1="7" x2="22" y2="14"/>
-					<line x1="22" y1="30" x2="22" y2="37"/>
-				</g>
+	<!-- Profil oben: Avatar + Name + Firmenname (wie im Figma) -->
+	<div class="profile">
+		<div class="avatar" aria-hidden="true">
+			<svg viewBox="0 0 24 24" fill="#fbc02d">
+				<circle cx="12" cy="12" r="12"/>
+				<path d="M12 6a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm0 8c-3.3 0-6 1.5-6 4v1h12v-1c0-2.5-2.7-4-6-4Z" fill="white"/>
 			</svg>
 		</div>
-		<div class="brand-text">
+		<div class="profile-text">
 			<div class="user-name">{displayName}</div>
 			<div class="company">{displayCompany}</div>
 		</div>
 	</div>
+
+	<div class="divider"></div>
 
 	<nav>
 		{#each navItems as item (item.href)}
 			<a href={item.href} class="nav-link" class:active={isActive(item.href)}>
 				<span class="icon" aria-hidden="true">
 					{#if item.icon === 'list'}
-						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+						<!-- Projekt-Icon (Lupe + Dokument, wie im Mockup) -->
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="14" height="14" rx="2"/><circle cx="14.5" cy="14.5" r="3.5"/><line x1="17" y1="17" x2="20" y2="20"/></svg>
 					{:else if item.icon === 'plus'}
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
 					{:else if item.icon === 'calendar'}
@@ -59,66 +58,77 @@
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
 					{/if}
 				</span>
-				<span>{item.label}</span>
+				<span class="label">
+					{#if item.icon === 'gear'}
+						<span class="label-main">Konto</span>
+						<span class="label-sub">Einstellungen</span>
+					{:else}
+						{item.label}
+					{/if}
+				</span>
 			</a>
 		{/each}
 	</nav>
 
 	<div class="footer">
 		{#if user}
-			<div class="role">Angemeldet als {user.role}</div>
 			<a href="/logout" class="footer-link">Abmelden →</a>
 		{:else}
-			<div class="role">Gast-Modus</div>
 			<a href="/login" class="footer-link">Anmelden →</a>
 		{/if}
-		<div class="version">v0.3.0 – Prototype</div>
 	</div>
 </aside>
 
 <style>
 	aside {
-		/* Volle gelbe Sidebar wie im Figma-Mockup */
-		background: var(--c-yellow);
-		border-right: 1px solid var(--c-yellow-dark);
+		background: white;
+		border-right: 1px solid var(--c-border);
 		display: flex;
 		flex-direction: column;
-		padding: var(--sp-5);
+		padding: 24px 0 24px 24px;
 		position: sticky;
 		top: 0;
 		height: 100vh;
-		color: var(--c-text);
+		overflow: visible; /* Damit die gelbe Aktiv-Pille rechts hinausragen kann */
 	}
 
-	.brand {
+	.profile {
 		display: flex;
-		gap: var(--sp-3);
+		gap: 12px;
 		align-items: center;
-		margin-bottom: var(--sp-6);
-		padding-bottom: var(--sp-4);
-		border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+		padding-right: 24px;
+		margin-bottom: 16px;
 	}
 
-	.logo {
-		width: 44px;
-		height: 44px;
+	.avatar {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		overflow: hidden;
 		flex-shrink: 0;
 	}
-	.logo :global(svg) {
+	.avatar :global(svg) {
 		width: 100%;
 		height: 100%;
 		display: block;
 	}
 
+	.profile-text { min-width: 0; }
 	.user-name {
-		font-weight: 700;
+		font-weight: 600;
 		font-size: 0.95rem;
 		color: var(--c-text);
+		line-height: 1.2;
+	}
+	.company {
+		color: var(--c-text-muted);
+		font-size: 0.8rem;
+		line-height: 1.3;
 	}
 
-	.company {
-		color: rgba(0, 0, 0, 0.65);
-		font-size: 0.8rem;
+	.divider {
+		border-top: 1px solid var(--c-border);
+		margin: 0 24px 16px 0;
 	}
 
 	nav {
@@ -131,31 +141,36 @@
 	.nav-link {
 		display: flex;
 		align-items: center;
-		gap: var(--sp-3);
-		padding: 10px 12px;
-		border-radius: var(--radius-sm);
+		gap: 14px;
+		padding: 12px 16px;
 		text-decoration: none;
-		color: rgba(0, 0, 0, 0.75);
+		color: var(--c-text);
 		font-size: 0.9rem;
-		font-weight: 600;
-		transition: background 0.15s, color 0.15s;
+		font-weight: 500;
+		transition: background 0.15s;
+		position: relative;
+		/* Pille die rechts über die Sidebar hinausragt: */
+		border-top-left-radius: 999px;
+		border-bottom-left-radius: 999px;
+		margin-right: -1px; /* überdeckt die border-right */
 	}
 
-	.nav-link:hover {
-		background: rgba(255, 255, 255, 0.35);
-		color: var(--c-text);
+	.nav-link:hover:not(.active) {
+		background: #f5f5f5;
 	}
 
 	.nav-link.active {
-		background: white;
+		background: var(--c-yellow);
 		color: var(--c-text);
-		font-weight: 700;
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+		font-weight: 600;
+		/* Schatten leicht nach rechts, damit die Pille deutlich hervortritt */
+		box-shadow: 2px 0 6px rgba(251, 192, 45, 0.25);
 	}
 
 	.icon {
-		width: 18px;
-		height: 18px;
+		width: 22px;
+		height: 22px;
+		flex-shrink: 0;
 		display: inline-flex;
 	}
 
@@ -166,22 +181,34 @@
 		stroke-linejoin: round;
 	}
 
-	.footer {
-		padding-top: var(--sp-4);
-		border-top: 1px solid rgba(0, 0, 0, 0.08);
-		font-size: 0.75rem;
-		color: rgba(0, 0, 0, 0.6);
-		line-height: 1.6;
+	.label {
+		display: flex;
+		flex-direction: column;
+		line-height: 1.2;
 	}
-	.role {
+	.label-main {
 		font-weight: 600;
-		color: rgba(0, 0, 0, 0.75);
 	}
+	.label-sub {
+		font-size: 0.72rem;
+		color: var(--c-text-muted);
+		font-weight: 400;
+	}
+	.nav-link.active .label-sub {
+		color: rgba(0, 0, 0, 0.6);
+	}
+
+	.footer {
+		padding: 12px 24px 0 0;
+		border-top: 1px solid var(--c-border);
+		margin-top: 16px;
+	}
+
 	.footer-link {
 		display: inline-block;
-		margin: 2px 0;
-		color: rgba(0, 0, 0, 0.7);
+		color: var(--c-text-muted);
 		text-decoration: none;
+		font-size: 0.85rem;
 	}
 	.footer-link:hover {
 		color: var(--c-text);
@@ -193,11 +220,16 @@
 			position: static;
 			height: auto;
 			border-right: none;
-			border-bottom: 1px solid var(--c-yellow-dark);
+			border-bottom: 1px solid var(--c-border);
+			padding: 16px;
 		}
 		nav {
 			flex-direction: row;
 			overflow-x: auto;
+		}
+		.nav-link {
+			border-radius: var(--radius-sm);
+			margin: 0;
 		}
 		.footer {
 			display: none;

@@ -1,4 +1,9 @@
 <script>
+	// Login-Page im selben visuellen Stil wie die Übersicht:
+	// - weisser Hintergrund (statt cream-gelb)
+	// - schlanke Card in der Mitte
+	// - BUILDEX-Diamant-Logo oben
+	// - Mockup-Style Buttons und Felder
 	import { enhance } from '$app/forms';
 	let { data, form } = $props();
 </script>
@@ -8,20 +13,19 @@
 </svelte:head>
 
 <div class="auth-page">
-	<!-- BUILDEX Diamant-Logo schwebt halb über der Card (wie im Figma) -->
-	<div class="logo-float">
-		<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-label="BUILDEX">
-			<circle cx="40" cy="40" r="40" fill="#fbc02d"/>
-			<g stroke="#1a1a1a" stroke-width="3.5" fill="none" stroke-linejoin="round">
-				<path d="M40 14 L60 30 L60 50 L40 66 L20 50 L20 30 Z"/>
-				<path d="M40 24 L52 33 L52 47 L40 56 L28 47 L28 33 Z"/>
-				<line x1="40" y1="14" x2="40" y2="24"/>
-				<line x1="40" y1="56" x2="40" y2="66"/>
-			</g>
-		</svg>
-	</div>
+	<div class="auth-container">
+		<div class="logo">
+			<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-label="BUILDEX">
+				<circle cx="40" cy="40" r="40" fill="#fbc02d"/>
+				<g stroke="#1a1a1a" stroke-width="3.5" fill="none" stroke-linejoin="round">
+					<path d="M40 14 L60 30 L60 50 L40 66 L20 50 L20 30 Z"/>
+					<path d="M40 24 L52 33 L52 47 L40 56 L28 47 L28 33 Z"/>
+					<line x1="40" y1="14" x2="40" y2="24"/>
+					<line x1="40" y1="56" x2="40" y2="66"/>
+				</g>
+			</svg>
+		</div>
 
-	<div class="card">
 		<h1>Anmeldung</h1>
 		<p class="subtitle">Bauunternehmer</p>
 
@@ -65,49 +69,45 @@
 	.auth-page {
 		min-height: 100vh;
 		display: flex;
-		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		padding: var(--sp-5);
-		background: #fef3c7; /* Cream-gelb wie Figma-Mockup */
-		position: relative;
+		padding: 24px;
+		background: var(--c-bg); /* gleicher hellgrauer Hintergrund wie Dashboard */
 	}
-	.logo-float {
-		width: 80px;
-		height: 80px;
-		margin-bottom: -40px;
-		z-index: 2;
-		filter: drop-shadow(0 4px 8px rgba(0,0,0,0.08));
+	.auth-container {
+		width: 100%;
+		max-width: 420px;
+		background: white;
+		border-radius: 16px;
+		padding: 48px 40px;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+		text-align: center;
 	}
-	.logo-float svg {
+	.logo {
+		width: 72px;
+		height: 72px;
+		margin: 0 auto 20px;
+	}
+	.logo svg {
 		width: 100%;
 		height: 100%;
 		display: block;
 	}
-	.card {
-		width: 100%;
-		max-width: 460px;
-		background: #fef9d9; /* sehr hell-cremiges Gelb wie Figma */
-		border-radius: 16px;
-		padding: 64px 48px 48px;
-		box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-		text-align: center;
-	}
 	h1 {
 		margin: 0 0 4px;
-		font-size: 1.75rem;
-		font-weight: 600;
+		font-size: 1.6rem;
+		font-weight: 700;
 		color: var(--c-text);
 	}
 	.subtitle {
 		color: var(--c-text-muted);
-		margin: 0 0 var(--sp-6);
-		font-size: 0.95rem;
+		margin: 0 0 28px;
+		font-size: 0.9rem;
 	}
 	.form {
 		display: flex;
 		flex-direction: column;
-		gap: var(--sp-3);
+		gap: 12px;
 	}
 	.visually-hidden {
 		position: absolute;
@@ -121,8 +121,8 @@
 		border: 0;
 	}
 	input {
-		padding: 14px 16px;
-		border: 1px solid #e5d97e;
+		padding: 13px 16px;
+		border: 1px solid var(--c-border);
 		border-radius: 8px;
 		font-size: 0.95rem;
 		font-family: inherit;
@@ -133,7 +133,7 @@
 	input:focus {
 		outline: none;
 		border-color: var(--c-yellow);
-		box-shadow: 0 0 0 3px rgba(251, 192, 45, 0.25);
+		box-shadow: 0 0 0 3px rgba(251, 192, 45, 0.2);
 	}
 	.err {
 		color: var(--c-danger);
@@ -152,7 +152,7 @@
 	.register-line {
 		font-size: 0.85rem;
 		color: var(--c-text-muted);
-		margin: var(--sp-2) 0 var(--sp-3);
+		margin: 8px 0 4px;
 	}
 	.register-line a {
 		color: var(--c-yellow-dark);
@@ -173,25 +173,28 @@
 		font-size: 1rem;
 		letter-spacing: 0.04em;
 		cursor: pointer;
+		font-family: inherit;
 		align-self: center;
-		margin-top: var(--sp-2);
+		min-width: 160px;
+		margin-top: 4px;
 	}
 	.anmelden-btn:hover {
 		background: var(--c-yellow-dark);
 	}
 	.demo-hint {
-		margin-top: var(--sp-5);
+		margin-top: 24px;
 		padding: 10px 14px;
-		background: white;
+		background: #fafafa;
+		border: 1px solid var(--c-border);
 		border-radius: 8px;
 		font-size: 0.8rem;
 		color: var(--c-text-muted);
-		border: 1px solid rgba(0,0,0,0.06);
 	}
 	.demo-hint code {
-		background: #f5f5f5;
+		background: white;
 		padding: 1px 5px;
 		border-radius: 3px;
 		color: var(--c-text);
+		border: 1px solid var(--c-border);
 	}
 </style>
