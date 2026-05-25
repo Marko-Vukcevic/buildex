@@ -12,6 +12,7 @@ import { MongoClient } from 'mongodb';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { createHash, randomBytes } from 'node:crypto';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -310,7 +311,47 @@ async function main() {
 		await db.collection('deliveries').deleteMany({});
 		await db.collection('notes').deleteMany({});
 		await db.collection('materials').deleteMany({});
+		await db.collection('users').deleteMany({});
 	}
+
+	// Demo-Users: damit Reviewer/Dozenten direkt einloggen können ohne Konto anzulegen
+	const userCol = db.collection('users');
+	const demoUsers = [
+		{
+			email: 'demo@buildex.ch',
+			username: 'demo',
+			password: 'demo123',
+			company: 'Bauunternehmung XY AG',
+			role: 'Bauführer'
+		},
+		{
+			email: 'marko@buildex.ch',
+			username: 'mvukcevic',
+			password: 'marko2026',
+			company: 'BUILDEX',
+			role: 'Bauleiter'
+		}
+	];
+	for (const u of demoUsers) {
+		const salt = randomBytes(16).toString('hex');
+		const passwordHash = createHash('sha256').update(salt + ':' + u.password).digest('hex');
+		await userCol.updateOne(
+			{ email: u.email },
+			{
+				$set: {
+					email: u.email,
+					username: u.username,
+					passwordHash,
+					salt,
+					company: u.company,
+					role: u.role,
+					createdAt: new Date()
+				}
+			},
+			{ upsert: true }
+		);
+	}
+	console.log(`✓ ${demoUsers.length} Demo-User upserted (demo@buildex.ch / demo123, marko@buildex.ch / marko2026).`);
 
 	// Materials: upsert
 	const matCol = db.collection('materials');

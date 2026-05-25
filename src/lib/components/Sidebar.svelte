@@ -1,6 +1,9 @@
 <script>
 	// Persistente Navigation links. Aktive Route wird hervorgehoben.
+	// Zeigt eingeloggten User (oder fallback "Max Muster" wenn kein User).
 	import { page } from '$app/state';
+
+	let { user = null } = $props();
 
 	const navItems = [
 		{ href: '/', label: 'Projektüberblick', icon: 'list' },
@@ -14,14 +17,18 @@
 		if (href === '/') return page.url.pathname === '/';
 		return page.url.pathname.startsWith(href);
 	}
+
+	let displayName = $derived(user?.username ?? 'Max Muster');
+	let displayCompany = $derived(user?.company ?? 'Bauunternehmung XY AG');
+	let displayInitial = $derived((user?.username ?? 'B')[0].toUpperCase());
 </script>
 
 <aside>
 	<div class="brand">
-		<div class="logo">B</div>
+		<div class="logo">{displayInitial}</div>
 		<div class="brand-text">
-			<div class="user-name">Max Muster</div>
-			<div class="company">Bauunternehmung XY AG</div>
+			<div class="user-name">{displayName}</div>
+			<div class="company">{displayCompany}</div>
 		</div>
 	</div>
 
@@ -47,8 +54,14 @@
 	</nav>
 
 	<div class="footer">
-		<div class="role">Rolle: Lieferant</div>
-		<div class="version">v0.1.0 – Prototype</div>
+		{#if user}
+			<div class="role">Angemeldet als {user.role}</div>
+			<a href="/logout" class="logout-link">Abmelden →</a>
+		{:else}
+			<div class="role">Gast-Modus</div>
+			<a href="/login" class="login-link">Anmelden →</a>
+		{/if}
+		<div class="version">v0.2.0 – Prototype</div>
 	</div>
 </aside>
 
@@ -149,6 +162,18 @@
 	.role {
 		font-weight: 600;
 		color: var(--c-text-muted);
+	}
+	.logout-link,
+	.login-link {
+		display: inline-block;
+		margin: 2px 0;
+		color: var(--c-text-muted);
+		text-decoration: none;
+	}
+	.logout-link:hover,
+	.login-link:hover {
+		color: var(--c-text);
+		text-decoration: underline;
 	}
 
 	@media (max-width: 720px) {

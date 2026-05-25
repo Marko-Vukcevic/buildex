@@ -3,19 +3,27 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import '../app.css';
 
-	let { children } = $props();
+	let { data, children } = $props();
+
+	// Auf Login/Register-Pages kein Sidebar-Layout
+	const AUTH_PAGES = ['/login', '/register'];
+	let isAuthPage = $derived(AUTH_PAGES.includes(data.pathname));
 </script>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<div class="app">
-	<Sidebar />
-	<main class="content">
-		{@render children()}
-	</main>
-</div>
+{#if isAuthPage}
+	{@render children()}
+{:else}
+	<div class="app">
+		<Sidebar user={data.user} />
+		<main class="content">
+			{@render children()}
+		</main>
+	</div>
+{/if}
 
 <style>
 	.app {
@@ -25,7 +33,7 @@
 	}
 	.content {
 		background: #fafafa;
-		min-width: 0; /* prevent overflow from child grids */
+		min-width: 0;
 	}
 	@media (max-width: 720px) {
 		.app {
