@@ -66,9 +66,30 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
   - Bedienbarkeit am Handy mit Arbeitshandschuhen und Offline-Fähigkeit sind unterschätzte Kriterien.
 - **Drei HMW-Fragen** wurden formuliert und priorisiert. Als **Leitfrage** wurde gewählt: *„Wie könnten wir Bauführern und Polieren eine baustellentaugliche Kalenderansicht geben, die alle eingehenden Lieferungen pro Projekt auf einen Blick zeigt und in unter 30 Sekunden als angekommen bestätigt werden kann?"*
 
+- **Proto-Personas:** Drei repräsentative Personas wurden definiert, um die Anforderungen zu schärfen:
+
+  | Persona | Profil | Goals | Pain Points (Status quo) |
+  |---|---|---|---|
+  | **Christian Brunner, 42** — Bauführer Marti AG, Region Zürich | 18 Jahre Bauerfahrung, mittlere Grossbaustellen (50-200 Mio CHF), 4 Projekte parallel | Wochenübersicht aller Lieferungen, schnelle Wareneingang-Bestätigung mobil, weniger E-Mail-Chaos | „Ich habe 200 PDFs im Outlook und keinen Plan welche Lieferung welche Woche kommt." |
+  | **Sara Iseli, 29** — Junior Bauleiterin Implenia, Vertiefung Hochbau | 3 Jahre nach FH-Abschluss, fokussiert auf Wohnüberbauungen | Strukturierte Daten für Reporting, CO₂-Bilanz pro Projekt, klare Status-Pipeline | „Mein Chef will jeden Freitag ein CO₂-Update — ich rechne das manuell aus Excel zusammen." |
+  | **Heinz Vogt, 58** — Polier ARGE-Baustelle Flughafen Zürich Erweiterung | 30 Jahre auf der Baustelle, eher Skeptiker gegenüber digitalen Tools | Sehr wenig Klicks, eindeutige Signale, Bedienung mit Arbeitshandschuhen | „Wenn ich 5 Klicks brauche um eine Lieferung als angekommen zu bestätigen, dann mache ich es nicht." |
+
+  Diese Personas haben drei zentrale Anforderungen geschärft: (1) Wochen-übergreifende Kalenderansicht als Hauptview, (2) Konflikt-Erkennung sichtbar als visueller Hinweis, (3) Status-Wechsel in einem Klick (Dropdown direkt in der Tabelle, kein Detail-Page-Roundtrip).
+
 ### 3.2 Sketch
 
 - **Variantenüberblick:** Drei Layout-Varianten wurden auf Papier skizziert: (a) listen-orientiert (Bauakten-Stil wie Capmo), (b) projekt-kartenbasiert (vergleichbar mit Trello/Asana, Drill-Down via Cards), (c) kalender-zentriert (Wochenansicht als Startseite). Die persistente Sidebar-Navigation (Slack-/Notion-Pattern) wurde durchgehend übernommen, weil sie auf Desktop-Auflösungen Standard und für Erweiterungen offen ist.
+
+- **Skizzen:** Die drei Varianten als Hand-Skizzen mit kurzem Pro/Contra-Vermerk:
+
+  ![Variante A — Listen-orientiert](docs/sketches/01-variante-liste.svg)
+  *Variante A — Listen-orientiert (Capmo-Stil). Verworfen: zu Excel-artig, „Card-Gefühl" geht verloren.*
+
+  ![Variante B — Projekt-Cards](docs/sketches/02-variante-cards.svg)
+  *Variante B — Projekt-Cards (Trello/Asana-Stil). **Gewählt** für Phase 1. Card-Metapher passt zum mentalen Modell der Bauleiter, Status-Badge sofort sichtbar, ist Figma-Mockup-konsistent.*
+
+  ![Variante C — Kalender-zentriert](docs/sketches/03-variante-kalender.svg)
+  *Variante C — Kalender-zentriert (Wochenansicht als Startseite). Für Phase 1 zu ambitioniert (Projekt-Stammdaten würden sich verstecken), aber das Konflikt-Konzept war stark — in Phase 2 als eigene Route `/calendar` umgesetzt (siehe Kap. 4.6).*
 - **Skizzen:** Mehrere Hand-Skizzen pro Variante haben unterschiedliche Ansichten der Dashboard- und Detail-Seiten getestet (siehe Anhang/Repo).
 
 ### 3.3 Decide
@@ -178,6 +199,69 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
     ```
   - Server-Loads (`+page.server.js`) lesen via `getProjectsCollection()`, Form-Actions schreiben.
   - Query-Parameter steuern Filter (`/?search=...&status=...`).
+- **Datenmodell – ER-Diagramm (5 Collections in MongoDB):**
+
+  ```mermaid
+  erDiagram
+      USER ||--o{ NOTE : "schreibt (author)"
+      PROJECT ||--o{ DELIVERY : "hat"
+      PROJECT ||--o{ NOTE : "hat"
+      MATERIAL ||--o{ DELIVERY : "wird verwendet in"
+      USER {
+          ObjectId _id
+          string email "unique"
+          string username "unique"
+          string passwordHash
+          string salt
+          string company
+          string role "z.B. Bauführer, Bauleiter"
+          Date createdAt
+      }
+      PROJECT {
+          ObjectId _id
+          string name
+          string address
+          string startDate "YYYY-MM"
+          string endDate "YYYY-MM"
+          string status "offen|laufend|pausiert|abgeschlossen"
+          string notes
+          Date createdAt
+          Date updatedAt
+      }
+      DELIVERY {
+          ObjectId _id
+          string projectId "FK to PROJECT"
+          string material "denormalized name"
+          string materialKey "FK to MATERIAL.key"
+          number quantity
+          string unit "m³|t|Stk"
+          string supplier
+          string scheduledDate "YYYY-MM-DD"
+          string status "bestellt|bestaetigt|unterwegs|angekommen|verrechnet"
+          number co2Kg "computed at write"
+          Date createdAt
+          Date updatedAt
+      }
+      NOTE {
+          ObjectId _id
+          string projectId "FK to PROJECT"
+          string text "max 1000 chars"
+          string author "User.username or 'Max Muster'"
+          Date createdAt
+      }
+      MATERIAL {
+          ObjectId _id
+          string key "unique, e.g. beton_c30"
+          string name "Anzeige-Name"
+          string unit
+          number co2PerUnit "kg CO₂ / unit (KBOB)"
+      }
+  ```
+
+  Designentscheidungen am Datenmodell:
+  - **Denormalisierung von `co2Kg` in DELIVERY** statt Live-Berechnung — ermöglicht effiziente Aggregations-Queries auf der Stats-Seite ohne Join.
+  - **Material-Referenz als String-Key** (`materialKey`), nicht als ObjectId-Foreign-Key — vereinfacht Imports und macht das Schema lesbarer.
+  - **`author` als denormalisierter Username-String in NOTE** — Bautagebuch-Charakter: Notiz behält den damaligen Username auch wenn der User später umbenannt/gelöscht wird.
 - **Deployment:** Auf Netlify deployed. Build-Befehl `npm run build`. Environment Variable `MONGODB_URI` ist im Netlify-Dashboard hinterlegt (nicht im Repo).
   - **Live-URL:** *Wird nach Netlify-Deploy ergänzt.*
 - **Besondere Entscheidungen / Trade-offs:**
