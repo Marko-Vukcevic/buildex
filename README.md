@@ -8,7 +8,7 @@ Digitale Projektverwaltung als Einstieg in den durchgängigen Materialbeschaffun
 
 **Autor:** Marko Vukcevic ([vukcema1@students.zhaw.ch](mailto:vukcema1@students.zhaw.ch))
 **Modul:** Prototyping (w.BA.XX.3Pt-WIN.XX), ZHAW Wirtschaftsinformatik, FS 2026
-**Figma-Mockup:** <https://www.figma.com/design/w0d5idq8xY1KQAPKX1H2Kg/Mock-Up>
+**Figma-Mockup:** <https://www.figma.com/design/w0d5idq8xY1KQAPKX1H2Kg/Mock-Up?node-id=0-1&t=bWe691OHcQJzafzs-1>
 
 ## Inhaltsverzeichnis
 
@@ -126,7 +126,7 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
   6. Sidebar → Wochenkalender → alle Lieferungen über alle Projekte, Konflikt-Banner bei >3 Lieferungen/Tag/Baustelle.
   7. Sidebar → Statistiken → Globale CO₂-Bilanz mit Top-5-Materialien-Ranking.
 
-- **Mockup:** Interaktives Figma-Mockup mit Login, Dashboard, Settings, Projektansicht und Kalender. Link siehe oben. Der Prototyp baut visuell und konzeptionell auf diesem Mockup auf. Zusätzlich liegt eine *A4-Visualisierung* mit User-Flow, USP und 5 Mock-Up-Screenshots als PDF im Repo unter `/docs/A4-Visualisierung_BUILDEX.pdf`.
+- **Mockup:** Interaktives Figma-Mockup mit Login, Dashboard, Settings, Projektansicht und Kalender → <https://www.figma.com/design/w0d5idq8xY1KQAPKX1H2Kg/Mock-Up?node-id=0-1&t=bWe691OHcQJzafzs-1> (View-Zugriff für alle mit Link). Der Prototyp baut visuell und konzeptionell auf diesem Mockup auf. Zusätzlich liegt eine *A4-Visualisierung* mit User-Flow, USP und 5 Mock-Up-Screenshots als PDF im Repo unter `/docs/A4-Visualisierung_BUILDEX.pdf`.
 
 ### 3.4 Prototype
 
@@ -507,7 +507,11 @@ KI hat das Setup (SvelteKit, MongoDB, Netlify) und den Aufbau wiederkehrender Pa
 - **A4-Visualisierung:** Pitch-Übersicht mit 5-Stakeholder-Workflow, USP und Mock-Up-Übersicht — siehe [docs/A4-Visualisierung_BUILDEX.pdf](docs/A4-Visualisierung_BUILDEX.pdf) (falls eingecheckt) bzw. als Begleitmaterial.
 - **Skizzen (Sketch-Phase):** Drei Variantenskizzen auf kariertem Papier — siehe Kap. 3.2 (`docs/sketches/variante-1.png` bis `variante-3.png`).
 - **Screenshots:** Sechs Live-App-Screenshots — siehe Kap. 3.4 (`docs/screenshots/`).
-- **Cross-Reference Usability-Evaluation (Reziprozität):** Im gleichen Pflichttermin am 20.05.2026 habe ich umgekehrt das Projekt **StudyStreak** von Valdrin Dalipi getestet ([https://github.com/dalipivaldrin/studystreak](https://github.com/dalipivaldrin/studystreak)). Mein Feedback ist in seinem README dokumentiert.
+- **Cross-Reference Usability-Evaluation (Reziprozität):** Im gleichen Pflichttermin am 20.05.2026 habe ich umgekehrt zwei Projekte von Mitstudierenden getestet:
+  - **StudyStreak** von Valdrin Dalipi — <https://github.com/dalipivaldrin/studystreak>
+  - **Flexmatch** von Patrick Ferreira — <https://github.com/ferrepa/Flexmatch>
+
+  Mein Feedback ist in den jeweiligen READMEs dokumentiert.
 - **Branchenkontext / Quellen:**
   - Baubranche verursacht ca. 11 % des globalen CO₂-Ausstosses — *UN Environment Programme, Global Status Report for Buildings and Construction*.
   - CO₂-Faktoren in `src/lib/server/materials.js` basieren auf vereinfachten Werten aus den **KBOB-Ökobilanzdaten im Baubereich** (öffentlich, nicht für offizielle Bilanzierung tauglich).
