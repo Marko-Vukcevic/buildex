@@ -313,7 +313,7 @@ Das Projekt folgt dem phasenbasierten Design-Sprint-Vorgehen aus dem Modul.
 
 > **Profil-Lücke (transparent dokumentiert):** Das Profil der Tester entspricht *nicht* der primären Zielgruppe (Bauführer/Bauleiter). Die Ergebnisse zeigen daher vor allem Usability-Aspekte aus *Laien-Sicht* (Lesbarkeit, Affordances, Begriffsverständnis). Domänen-spezifische Erkenntnisse (z. B. ob die Lieferungs-Status-Pipeline einem echten Bauwerkflow entspricht) werden in einer Folge-Iteration mit Bauleiter-Probanden geprüft.
 >
-> **Reziprozität:** Im Rahmen desselben Pflichttermins habe ich umgekehrt das Projekt **StudyStreak** von Valdrin Dalipi getestet (siehe Cross-Reference im Anhang).
+> **Reziprozität:** Im Rahmen desselben Pflichttermins habe ich umgekehrt zwei Projekte von Mitstudierenden getestet: **StudyStreak** von Valdrin Dalipi und **Flexmatch** von Patrick Ferreira (siehe Cross-Reference im Anhang).
 
 **Aufgaben/Szenarien:**
 
